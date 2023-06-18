@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Andrew's Homepage - Projects</title>
+    <meta charset="utf-8">
+    <meta name="description" content="The Homepage of Andrew Lalis.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/font.css" type="text/css">
+
+    <!-- CSS class to hide elements if JS is not enabled. -->
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    
+    <script>
+        // An inline script that manages the site's color theme.
+        const THEMES = ["light", "dark"];
+
+        function getPreferredTheme() {
+            const storedTheme = localStorage.getItem("theme");
+            if (storedTheme !== null && THEMES.includes(storedTheme)) return storedTheme;
+            if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                return "dark";
+            }
+            return "light";
+        }
+
+        function setPreferredTheme(theme) {
+            document.documentElement.className = theme;
+            localStorage.setItem("theme", theme);
+        }
+
+        setPreferredTheme(getPreferredTheme());
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
+            const newTheme = event.matches ? "dark" : "light";
+            setPreferredTheme(newTheme);
+        });
+        document.addEventListener("DOMContentLoaded", event => {
+            const themeToggleButton = document.getElementById("themeToggleButton");
+            themeToggleButton.onclick = clickEvent => {
+                const currentTheme = getPreferredTheme();
+                const idx = THEMES.indexOf(currentTheme);
+                const nextIdx = idx === THEMES.length - 1 ? 0 : idx + 1;
+                setPreferredTheme(THEMES[nextIdx]);
+            };
+        });
+    </script>
+
+    <link rel="stylesheet" href="styles/style.css" type="text/css">
+    <link rel="stylesheet" href="styles/project.css" type="text/css">
+    <link rel="stylesheet" href="vendor/prism.css" data-noprefix>
+    <script src="vendor/prism.js"></script>
+</head>
+
+<body>
+    <header class="page-header">
+        <h1>Andrew's Projects</h1>
+        <nav>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="blog.html">Articles</a>
+                <a class="page-header-selected" href="projects.html">Projects</a>
+                <a href="training.html">Training</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div>
+                <a href="https://github.com/andrewlalis">GitHub</a>
+                <a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+                <a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+            </div>
+        </nav>
+        <button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+        <hr>
+    </header>
+    <main>
+        <article class="project-card">
+            <h2><a href="">Ace of Shades</a></h2>
+            <p>
+                A top-down 2D shooter game inspired by <em>Ace of Spades</em>, and was made as a submission the 2021 Java Discord server's Java Jam. Includes a dedicated server, client, and server registry application.
+            </p>
+            <video src="videos/aos-latest-2023-04-06_19.39.53.mp4" type="video/mp4" style="width: 100%" controls></video>
+            <img src="images/logo_java.svg" class="lang-icon" alt="Java programming language logo">
+        </article>
+
+        <article class="project-card">
+            <h2><a href="">Ace of Shades 2</a></h2>
+            <p>
+                A 3D first-person shooter designed as the successor to <em>Ace of Shades</em>. This was again made as a 2022 Java Discord Java Jam submission, but I continued to develop it well beyond that.
+            </p>
+            <video src="videos/aos2-2022-07-29_16.25.08.mp4" type="video/mp4" style="width: 100%" controls></video>
+            <img src="images/logo_java.svg" class="lang-icon" alt="Java programming language logo">
+            <img src="images/logo_open_gl.png" class="lang-icon" alt="OpenGL API logo">
+        </article>
+
+        <article class="project-card">
+            <h2><a href="https://github.com/andrewlalis/handy-httpd">Handy-Httpd</a></h2>
+            <p>
+			    An extremely lightweight and flexible HTTP server implemented in the D programming language. Below is an example of a "<em>Hello world</em>" server that just says "Hello" in response to any request.
+            </p>
+            <pre><code class="language-d">
+                import handy_httpd;
+
+                void main() {
+                    HttpServer server = new HttpServer((ref ctx) {
+                        ctx.response.writeBodyString("Hello");
+                    });
+                    server.start();
+                }
+            </code></pre>
+            <img src="images/logo_d.png" class="lang-icon" alt="D programming language logo">
+        </article>
+
+        <article class="project-card">
+            <h2><a href="https://github.com/andrewlalis/movescript">Movescript & Itemscript</a></h2>
+            <p>
+                Simple grammars for concisely defining robotic movement and inventory management for ComputerCraft robots in Minecraft.
+            </p>
+            <p>
+                Instead of doing this:
+            </p>
+            <pre><code class="language-lua">
+                turtle.forward()
+                turtle.forward()
+                local success = turtle.up()
+                while not success do
+                    success = turtle.up()
+                end
+                turtle.dig()
+            </code></pre>
+            <p>
+                You can use Movescript to safely move using a simpler syntax:
+            </p>
+            <pre><code class="language-lua">
+                local ms = require("movescript")
+                ms.run("2FUDg")
+            </code></pre>
+            <img src="images/logo_lua.png" class="lang-icon" alt="Lua programming language logo">
+        </article>
+
+        <article class="project-card">
+            <h2><a href="">Rail Signal</a></h2>
+            <p>
+			    API and web app for designing and managing rail systems, with real-time data updates via websockets. Originally designed for use with Minecraft and the Immersive Railroading mod, but practically can be used anywhere, as long as you've got the right device driver.
+            </p>
+            <img src="images/logo_java.svg" class="lang-icon" alt="Java programming language logo">
+            <img src="images/logo_spring_sm.png" class="lang-icon" alt="Spring Framework logo">
+            <img src="images/logo_vue.svg" class="lang-icon" alt="Vue JS framework logo">
+            <img src="images/logo_lua.png" class="lang-icon" alt="Lua programming language logo">
+        </article>
+
+        <article class="project-card">
+            <h2><a href="https://github.com/andrewlalis/slf4d">SLF4D</a></h2>
+            <p>
+                A common logging interface for D projects, inspired by Java's SLF4J interfaces, but in an idiomatic D way. Any library can make use of SLF4D, while still letting the application developer decide how log messages are handled.
+            </p>
+            <p>
+                Here's an example of how it's used:
+            </p>
+            <pre><code class="language-d">
+                import slf4d;
+
+                void myFunction(int n) {
+                    infoF!"Called myFunction with n = %d"(n);
+                    for (int i = 0; i &lt; n; i++) {
+                        try {
+                            doSomethingRisky(i);
+                        } catch (Exception e) {
+                            warn("Failed to do something risky.", e);
+                        }
+                    }
+                }
+            </code></pre>
+            <img src="images/logo_d.png" class="lang-icon" alt="D programming language logo">
+        </article>
+
+        <article class="project-card">
+            <h2><a href="https://github.com/andrewlalis/streams">Streams</a></h2>
+            <p>
+                A library that defines compile-time primitives and helper functions for working with <em>streams</em> of elements. A stream is anything which provides a <code>readFromStream</code> or <code>writeToStream</code> method. Also includes many stream implementations for things like files, sockets, chunked encoding, buffering, and more.
+            </p>
+            <img src="images/logo_d.png" class="lang-icon" alt="D programming language logo">
+        </article>
+    </main>
+</body>
+
+</html>
+

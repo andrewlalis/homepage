@@ -1,0 +1,17 @@
+.project-card {
+    background-color: var(--background-color-2);
+    padding: 0.5em;
+    margin-top: 1em;
+}
+
+.project-card h2 {
+    margin-top: 0;
+}
+
+.lang-icon {
+    max-height: 2.5em;
+}
+
+.lang-icon:not(:last-child) {
+    margin-right: 0.5em;
+}

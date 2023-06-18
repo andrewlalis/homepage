@@ -1,0 +1,80 @@
+:root.light {
+    --background-color: #e8e8e8;
+    --background-color-2: #e0e0e0;
+    --background-color-3: #d1d1d1;
+    --text-color: #1c1c1c;
+    --link-color: #194b26;
+}
+
+:root.dark {
+    --background-color: #1c1c1c;
+    --background-color-2: #222222;
+    --background-color-3: #2b2b2b;
+    --text-color: #e8e8e8;
+    --link-color: #46d169;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: "IBM Plex Sans", sans-serif;
+    max-width: 50ch;
+    margin: 0 auto;
+    padding: 0 1em;
+    padding-bottom: 1em;
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+hr {
+    max-width: 60ch;
+}
+
+h1 {
+    font-weight: 300;
+}
+
+code {
+    font-family: "IBM Plex Mono", monospace;
+}
+
+.stats-table {
+    background-color: var(--background-color-2);
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid blue;
+}
+
+.stats-table th {
+    text-align: start;
+    border: 1px solid var(--background-color-3);
+    padding: 0.5em;
+}
+
+.stats-table td {
+    font-family: "IBM Plex Mono";
+    text-align: end;
+    border: 1px solid var(--background-color-3);
+    padding: 0.5em;
+}
+
+.page-header {
+    text-align: center;
+}
+
+.page-header div {
+    background-color: var(--background-color-2);
+    margin: 0.25em auto;
+    padding: 0.25em;
+}
+
+.page-header a:not(:last-child) {
+    padding-right: 0.25em;
+}
+
+.page-header-selected {
+    text-decoration: underline !important;
+}

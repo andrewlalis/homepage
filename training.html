@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Andrew's Homepage - Training</title>
+    <meta charset="utf-8">
+    <meta name="description" content="An overview of Andrew's lifting, endurance, and other athletic achievements.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/font.css" type="text/css">
+
+    <!-- CSS class to hide elements if JS is not enabled. -->
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    
+    <script>
+        // An inline script that manages the site's color theme.
+        const THEMES = ["light", "dark"];
+
+        function getPreferredTheme() {
+            const storedTheme = localStorage.getItem("theme");
+            if (storedTheme !== null && THEMES.includes(storedTheme)) return storedTheme;
+            if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                return "dark";
+            }
+            return "light";
+        }
+
+        function setPreferredTheme(theme) {
+            document.documentElement.className = theme;
+            localStorage.setItem("theme", theme);
+        }
+
+        setPreferredTheme(getPreferredTheme());
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
+            const newTheme = event.matches ? "dark" : "light";
+            setPreferredTheme(newTheme);
+        });
+        document.addEventListener("DOMContentLoaded", event => {
+            const themeToggleButton = document.getElementById("themeToggleButton");
+            themeToggleButton.onclick = clickEvent => {
+                const currentTheme = getPreferredTheme();
+                const idx = THEMES.indexOf(currentTheme);
+                const nextIdx = idx === THEMES.length - 1 ? 0 : idx + 1;
+                setPreferredTheme(THEMES[nextIdx]);
+            };
+        });
+    </script>
+
+    <link rel="stylesheet" href="styles/style.css" type="text/css">
+</head>
+
+<body>
+    <header class="page-header">
+        <h1>Andrew's Training</h1>
+        <nav>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="blog.html">Articles</a>
+                <a href="projects.html">Projects</a>
+                <a class="page-header-selected" href="training.html">Training</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div>
+                <a href="https://github.com/andrewlalis">GitHub</a>
+                <a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+                <a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+            </div>
+        </nav>
+        <button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+        <hr>
+    </header>
+    <main>
+        <article>
+            <h2>Lifting</h2>
+            <p>
+                This table lists my current personal records for various lifts, including the big 3 (<em>barbell bench, squat, and deadlift</em>). Unless I specify otherwise, these are all 1-rep-max attempts.
+            </p>
+            <p>
+                You can check out my <a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube channel</a> for some videos of these lifts.
+            </p>
+            <table class="stats-table">
+                <tr><th>Barbell Bench Press</th><td>125 Kg</td></tr>
+                <tr><th>Barbell Squat</th><td>170 Kg</td></tr>
+                <tr><th>Barbell Deadlift (Conventional)</th><td>212.5 Kg</td></tr>
+                <tr><th>Barbell Overhead Press</th><td>90 Kg</td></tr>
+                <tr><th>Dumbbell Bench Press</th><td>50 Kg</td></tr>
+                <tr><th>EZ-Bar Strict Curl</th><td>45 Kg</td></tr>
+            </table>
+            <p>
+                Currently, I'm following a simple powerlifting "5x5" training plan for each of the big 3 lifts. This means that each time I perform one of those lifts, I do 5 working sets with a weight that's just heavy enough for me to do 5 reps with. Once I can successfully do a 5x5 with a certain weight twice in a row, I increment the weight slightly.
+            </p>
+        </article>
+        <article>
+            <h2>Running</h2>
+            <p>
+                Occasionally, I get into (somewhat) long-distance running. Here's a list of some of my achievements in that area.
+            </p>
+            <table class="stats-table">
+                <tr><th>5k Personal Best</th><td><time datetime="PT20M29S">20:29</time></td></tr>
+                <tr><th>10k Personal Best</th><td><time datetime="PT44M39S">44:39</time></td></tr>
+                <tr><th>Best Distance</th><td>21.49 Km</td></tr>
+                <tr><th>Total Distance</th><td>1025.30 Km</td></tr>
+            </table>
+        </article>
+    </main>
+</body>
+
+</html>

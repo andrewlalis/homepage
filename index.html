@@ -3,50 +3,89 @@
 
 <head>
     <title>Andrew's Homepage</title>
-    <meta charset="utf-8"/>
-    <meta name="description" content="The Homepage of Andrew Lalis."/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <!-- <link rel="stylesheet" href="style.css" type="text/css"/> -->
-    <style>
-        article {
-            max-width: 50ch;
-            margin-left: auto;
-            margin-right: auto;
+    <meta charset="utf-8">
+    <meta name="description" content="The Homepage of Andrew Lalis.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/font.css" type="text/css">
+
+    <!-- CSS class to hide elements if JS is not enabled. -->
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    
+    <script>
+        // An inline script that manages the site's color theme.
+        const THEMES = ["light", "dark"];
+
+        function getPreferredTheme() {
+            const storedTheme = localStorage.getItem("theme");
+            if (storedTheme !== null && THEMES.includes(storedTheme)) return storedTheme;
+            if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                return "dark";
+            }
+            return "light";
         }
-    </style>
+
+        function setPreferredTheme(theme) {
+            document.documentElement.className = theme;
+            localStorage.setItem("theme", theme);
+        }
+
+        setPreferredTheme(getPreferredTheme());
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
+            const newTheme = event.matches ? "dark" : "light";
+            setPreferredTheme(newTheme);
+        });
+        document.addEventListener("DOMContentLoaded", event => {
+            const themeToggleButton = document.getElementById("themeToggleButton");
+            themeToggleButton.onclick = clickEvent => {
+                const currentTheme = getPreferredTheme();
+                const idx = THEMES.indexOf(currentTheme);
+                const nextIdx = idx === THEMES.length - 1 ? 0 : idx + 1;
+                setPreferredTheme(THEMES[nextIdx]);
+            };
+        });
+    </script>
+
+    <link rel="stylesheet" href="styles/style.css" type="text/css">
 </head>
 
 <body>
-    <main>
-        <h1 style="text-align: center;">Andrew's Homepage</h1>
-
-        <nav style="text-align: center;">
-            <a href="https://github.com/andrewlalis">GitHub</a>
-            <a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
-            <a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
-            <a href="contact">Contact</a>
+    <header class="page-header">
+        <h1>Andrew's Homepage</h1>
+        <nav>
+            <div>
+                <a class="page-header-selected" href="index.html">Home</a>
+                <a href="blog.html">Articles</a>
+                <a href="projects.html">Projects</a>
+                <a href="training.html">Training</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div>
+                <a href="https://github.com/andrewlalis">GitHub</a>
+                <a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+                <a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+            </div>
         </nav>
-
-        <hr/>
-
+        <button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+        <hr>
+    </header>
+    <main>
         <article>
             <h2>About Andrew</h2>
             <p>
-                Andrew (the author of this site) is a software engineer by education and profession, but I also do a few other things in my spare time. That includes some combination of running, lifting, computer gaming, and cooking.
+                I (Andrew) am a software engineer by education and profession, but I also do a few other things in my spare time. That includes some combination of running, lifting, computer gaming, and cooking.
             </p>
         </article>
 
         <article>
             <h2>About this Site</h2>
             <p>
-                This page was written by Andrew Lalis, to be his personal website on the world-wide-web. It's got all the usual stuff that a personal site should have, like important links and contact details, plus a little series of articles I've written about my experiences with programming, lifting, gaming, or anything else of interest.
+                This page was written by me, Andrew Lalis, to be my personal website on the world-wide-web. It's got all the usual stuff that a personal site should have, like important links and contact details, plus a little series of articles I've written about my experiences with programming, lifting, gaming, or anything else of interest.
             </p>
             <p>
-                As you can see, I'm a fan of the <em>plain HTML is responsive</em> school of thought. This website is intentionally very simple in its structure, styling, and interactivity. This is because I believe that the vast majority of the internet's most popular websites sacrifice usability and accessibility to make a flashier product.
+                As you can see, I'm a fan of the <em>"plain HTML is responsive"</em> school of thought. This website is intentionally very simple in its structure, styling, and interactivity. This is because I believe that the vast majority of the internet's most popular websites sacrifice usability and accessibility to make a flashier product. By using a simpler design, we can help to make the internet more accessible to all, regardless of their physical ability or device's processing power.
             </p>
         </article>
     </main>
-    
 </body>
 
 </html>
