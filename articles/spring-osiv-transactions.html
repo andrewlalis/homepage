@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Spring's Open-Session-in-View &amp; Transactions</title>
+	<meta charset="utf-8"/>
+	<meta name="description" content="Some explanation about Spring Boot's open-session-in-view setting and how to get around it."/>
+	<link rel="stylesheet" href="../../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/prism.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/blog-article.css" type="text/css"/>
+</head>
+<body>
+
+<article>
+	<header>
+		<h1>Spring's Open-Session-in-View &amp; Transactions</h1>
+		<p>
+			<em>Written on <time>May 9, 2021</time>, by Andrew Lalis.</em>
+		</p>
+	</header>
+	<section>
+		<p>
+			If you're reading this article, there's a good chance you've already heard about Spring's controversial <code>OpenSessionInViewFilter</code>, which allows lazy loading of entity relations during the rendering of a web view. In case you haven't, I suggest reading this excellent <a href="https://vladmihalcea.com/the-open-session-in-view-anti-pattern/">article by Vlad Mihalcea</a> which goes into much more detail on why one should avoid using the filter entirely.
+		</p>
+		<p>
+			This article will focus on the practical way to structure your application logic so that you can still take advantage of Hibernate's lazy loading, without using the OSIV anti-pattern.
+		</p>
+	</section>
+	<section>
+		<h3>Don't Send Entities to Your View</h3>
+		<p>
+			At first, many of the simple tutorials you'll read online will have you passing your entity models to Thymeleaf or JSP templates to render a web page for your application. This convenience is what leads developers to use OSIV in the first place, because they start fetching attributes of their entity which were not initially loaded. This is fine for the most simple "Hello World" starter projects, but as soon as you add any real complexity, this "convenience" breaks down into an unorganized mess, where it is not clear at a glance where data will be fetched from the database.
+		</p>
+		<p>
+			One solution, which beginners often turn to, is to simply eager-fetch all the attributes they'll need using a their data-access object (<em>usually a repository with a custom JPQL query</em>). This works well enough, and is often the preferred solution since it's about as optimized as you can get. The issue with this approach is that it's just not scalable to maintain a huge library of queries that are each tailor-made for a particular use case, and tends to sidestep Hibernate's powerful lazy-fetching features.
+		</p>
+		<figure>
+			<pre><code class="language-java">
+					@Query("SELECT a FROM Assignment a " +
+							"LEFT JOIN FETCH a.gradings " +
+							"LEFT JOIN FETCH a.zippedFile " +
+							"WHERE a.id = :id")
+					Optional&lt;Assignment&gt; findByIdWithAllRelations(Long id);
+			</code></pre>
+			<figcaption>This is an example of the the sort of JPQL queries that will become common if you try to always fetch exactly what you need. One or two of these methods is fine, but if the <code>Assignment</code> entity is used in 150 different places in our code, each with different requirements for which attribute need to be fetched, then this becomes unsustainable.</figcaption>
+		</figure>
+		<p>
+			Eager-fetching the right attributes for an entity still leaves you with the issue of passing your actual entity object to the view for rendering, which means that an unsuspecting developer will eventually try to read a lazy-loaded attribute, which will throw a LazyInitializationException. The solution to that issue, is to not pass your entity to the view at all, but instead pass a data-transfer object (DTO) containing exactly the data that the view requires, and nothing more. And now, your service layer is responsible for producing this DTO, and it <em>can</em> take full advantage of Hibernate's lazy-loading functionality.
+		</p>
+	</section>
+	<section>
+		<h3>Transactions</h3>
+		<p>
+			The Spring framework allows you to annotate a service's method as <code>@Transactional</code>, which means that at runtime, when your method is called, a proxy method is wrapped around it which starts a transaction (and thus a Hibernate session to go with it) that persists for the duration of the method. Inside this method, you are free to fetch lazy-loaded attributes from an entity, without having to deal with LazyInitializationExceptions.
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				@Transactional
+				public boolean isPersonAdmin(long personId) {
+					Person p = this.personRepo.findById(personId).orElseThrow();
+					for (Role r : p.getRoles()) {
+						if (r.getName().equals("ADMIN")) return true;
+					}
+					return false;
+				}
+			</code></pre>
+			<figcaption>In this example, we have a service method <code>isPersonAdmin</code>, which looks to see if a person has the "ADMIN" role. This will work even if the person's list of roles is lazy-loaded, because it all happens in the context of the transaction.</figcaption>
+		</figure>
+		<p>
+			One caveat to be aware of is the fact that entity object should not be passed as arguments to a transactional method, since the Hibernate session that is dedicated to the transaction has no idea what that entity is, and thus can't fetch lazy attributes from it.
+		</p>
+		<p>
+			However, the flexibility of being able to use lazy-loaded attributes the easy way more than makes up for the strict encapsulation rules, and by structuring your project around service methods as black-box operations, you'll be able to build huge projects while keeping your sanity mostly intact.
+		</p>
+	</section>
+	<a href="../blog.html">Back to Dev Discussions</a>
+</article>
+<script src="../../js/prism.js"></script>
+<script src="../../js/themes.js"></script>
+</body>
+</html>

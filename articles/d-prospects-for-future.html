@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>The D Programming Language: Does it have a future?</title>
+	<meta charset="utf-8"/>
+	<meta name="description" content="Discussion around the D programming language and its potential and future as a general language."/>
+	<link rel="stylesheet" href="../../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/prism.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/blog-article.css" type="text/css"/>
+</head>
+<body>
+
+<article>
+	<header>
+		<h1>The D Programming Language: Does it have a future?</h1>
+		<p>
+			<em>Written on <time>March 26, 2022</time>, by Andrew Lalis.</em>
+		</p>
+	</header>
+	<section>
+		If you've spent any time around me in programming forums or Discord channels, you might be aware of my somewhat
+		zealous nature regarding the <a href="https://dlang.org/">D programming language</a> and its potential to be the
+		<em>next great language</em>. In this article, I'd like to dive into the various reasons I have for taking such
+		a radical stance, and contrast those ideals with some harsh realities.
+	</section>
+	<section>
+		<h3>The Potential</h3>
+		<p>
+			Because it was designed many years after the advent of most of the main programming languages that form the
+			backbone of our software (C, C++, Java, Python, etc.), D has the benefit of 20/20 hindsight that it uses to
+			improve over some quite glaring flaws in earlier languages.
+		</p>
+		<p>
+			From our past, we've learned a few key things which contribute to great languages:
+		</p>
+		<ul>
+			<li><strong>Expressiveness</strong>: it should be very easy to express complex structures and processes.</li>
+			<li><strong>Abstraction</strong>: programmers should be able to create abstractions without significant extra cost.</li>
+			<li><strong>Ease of use</strong>: it should be really easy for new programmers to get started, and for pros to do things quickly.</li>
+			<li><strong>Performance</strong>: programs written in the language should be reasonably efficient and fast.</li>
+		</ul>
+		<p>
+			Of the other languages I've mentioned, each of those easily achieves a few of these requirements: C++
+			is expressive and allows efficient abstraction, and it's very fast. However, it's generally accepted that
+			the learning C++ is quite difficult. Again, Python can arguably meet the first three requirements, but fails
+			to provide satisfactory performance for many applications.
+		</p>
+		<p>
+			I think that D is a language which addresses all of these requirements in a modest, satisfactory approach.
+		</p>
+		<ul>
+			<li>D allows the same level of expressiveness as C++, while offering the convenience of Java when you don't want that.</li>
+			<li>Abstraction in D is as simple as in Java.</li>
+			<li>D is relatively easy to learn, because of its simple module structure and automatic memory management by default.</li>
+			<li>Because D compiles to machine code, it is inherently open to all sorts of optimizations from LLVM and GCC compiler backends, earning it very good performance that's faster than Java but just shy of C++ in most cases.</li>
+		</ul>
+		<figure>
+			<pre><code class="language-d">
+				import std.stdio, std.array, std.algorithm;
+				void main() {
+					stdin
+						.byLineCopy
+						.array
+						.sort!((a, b) => a > b) // descending order
+						.each!writeln;
+				}
+			</code></pre>
+			<figcaption>This program sorts lines of input from <code>stdin</code> in alphabetical order and prints them.</figcaption>
+		</figure>
+		<figure>
+			<pre><code class="language-java">
+				import java.io.BufferedReader;
+				import java.io.IOException;
+				import java.io.InputStreamReader;
+				class Main {
+					public static void main(String[] args) throws IOException {
+						try (var in = new BufferedReader(new InputStreamReader(System.in))) {
+							in
+								.lines()
+								.sorted(String::compareTo)
+								.forEachOrdered(System.out::println);
+						}
+					}
+				}
+			</code></pre>
+			<figcaption>An equivalent program written in Java.</figcaption>
+		</figure>
+		<p>
+			Of course, I could list all of the language features here which allow D to excel in each of the basic
+			requirements, but in short, it offers all of the power of a low-level systems language like C++, while at
+			the same time offering the convenience of high-level languages like automatic memory management, and
+			metaprogramming. So, I think that D is somewhat unique in that it gives programmers a freedom to choose
+			their own preferred style; it's a language accomplishes as much as a family of languages.
+		</p>
+	</section>
+	<section>
+		<h3>Why Isn't D Popular?</h3>
+		<p>
+			You'd think that all these benefits, developers would be flocking in droves to D. But clearly in the real
+			world, that's not the case. <strong>Why?</strong> This section outlines some of the reasons why the language
+			hasn't attained the same level of popularity as others.
+		</p>
+		<h4>Late to the Party</h4>
+		<p>
+			Despite their modern-day popularity, all of the major programming languages are several decades old: Java
+			was created in 1995, Python in 1991, C++ in 1985, and so on. D was first conceived in 2001, giving all of
+			these other languages <em>years</em> to build a loyal following. Additionally, the early version of D
+			was highly volatile and suffered from having two competing implementations of a standard library. In 2007,
+			D2 was released for the first time, marking the "stabilization" of D, and the language has essentially grown
+			from there. So we're dealing with a relatively immature language as of yet, which still needs to prove its
+			worthiness in various disciplines before it gains popularity.
+		</p>
+		<h4>Paradoxical Loneliness</h4>
+		<p>
+			One fatal issue which affects many software projects is this: the project receives little attention from new
+			users, so it is not promoted to new users. Therefore, the project yet again receives little attention from
+			its limited userbase, and so on... D is no exception. Other popular languages were quickly adopted by large
+			corporations: Java by Oracle, C++ by Microsoft, Python by Google, etc. Now we're in a situation where most
+			large employers will choose a "tried and true" programming language that's been used by other corporations,
+			and thus less popular languages stay in the shadows. Since D isn't so radically different than other
+			languages but instead offers smaller meaningful, incremental improvements, it's also not the most flashy
+			new language for individual developers to rave about in the free time.
+		</p>
+		<h4>A New Ecosystem</h4>
+		<p>
+			Stemming from the other reasons mentioned above, because D is relatively new, its software ecosystem is
+			still growing, and lacks some of the mature, standard libraries we've come to expect from a general-purpose
+			programming language: a standard async library, an HTTP client, a standard GUI framework, and the list goes
+			on. Over time, these problems are usually solved by the community, so I believe that D will emerge with a
+			robust library of modules that rivals the Java and C++ ecosystems.
+		</p>
+	</section>
+	<a href="../blog.html">Back to Dev Discussions</a>
+</article>
+<script src="../../js/prism.js"></script>
+<script src="../../js/themes.js"></script>
+</body>
+</html>

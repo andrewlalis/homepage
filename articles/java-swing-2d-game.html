@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Java + Swing 2D Games</title>
+	<meta charset="utf-8"/>
+	<meta name="description" content="Important information for programmers who want to make simple 2D games with Java using the Swing framework."/>
+	<link rel="stylesheet" href="../../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/prism.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/blog-article.css" type="text/css"/>
+</head>
+<body>
+
+<article>
+	<header>
+		<h1>2D Game Development with Java and Swing</h1>
+		<p>
+			<em>Written on <time>May 9, 2021</time>, by Andrew Lalis.</em>
+		</p>
+	</header>
+	<section>
+		<p>
+			Often times, new programmers will immediately jump into making graphical applications using their new-found skills, without getting a firm grasp of how to design something that doesn't require refactoring literally any time new functionality is required. Obviously, we can't just collectively tell all new programmers to <em>just be patient</em>; that will never work. So hopefully this article can serve as a guide to put you on the right track to developing 2D applications (games, most likely) using Java and Swing.
+			<br>
+			<small>I will be referencing snippets of code that come from <a href="https://github.com/andrewlalis/BeforeAsteroids">this repository</a>, so check there if you want to read through all the code yourself.</small>
+		</p>
+		<p>
+			Since this is quite a large guide, you can skip to a particular section if you want:
+		</p>
+		<ul>
+			<li><a href="#mvc">Model-View-Control Design</a></li>
+			<li><a href="#swing_setup">Setting up a Swing GUI</a></li>
+			<li><a href="#game_loop">The Game Loop</a></li>
+			<li><a href="#listeners">Listeners and Control</a></li>
+		</ul>
+	</section>
+	<section id="mvc">
+		<h3>Model-View-Control Design</h3>
+		<p>
+			At first, it's super easy to make a new JFrame and start drawing on it, and you can add action listeners everywhere, whenever they're needed. If you ever plan on expanding beyond a simple 20-line drawing method however, you should organize your code using the <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">Model-View-Controller</a> pattern. For example, in my <a href="https://github.com/andrewlalis/BeforeAsteroids/tree/main/src/main/java/nl/andrewlalis"><em>Before Asteroids</em></a> sample game, I have split up my code into a few different packages.
+		</p>
+		<ul>
+			<li><strong>control</strong> - Contains all my game's listeners for player interaction.</li>
+			<li><strong>model</strong> - Contains all the code that makes up the core game model.</li>
+			<li><strong>view</strong> - Contains all the code for rendering the game model.</li>
+			<li><strong>physics</strong> - Some special physics code that is needed when updating the game model.</li>
+			<li><strong>util</strong> - Extra utilities for things like file IO.</li>
+		</ul>
+		<p>
+			In most cases, it's especially useful to define a single class that represents your entire game's state; a so-called <strong>Game Model</strong>. This model would contain all the entities in your game that exist in the world, for example. Or in the case of something like a simple tic-tac-toe game, it would contain data about the status of each of the nine squares on the board.
+		</p>
+		<p>
+			Keep this design pattern in mind, and working on your project as it grows larger hopefully won't become as much of a headache anymore.
+		</p>
+	</section>
+	<section id="swing_setup">
+		<h3>Setting up a Swing GUI</h3>
+		<p>
+			Making a Swing GUI usually consists of two basic components: the <strong>JFrame</strong> that acts as your application's window, and a <strong>JPanel</strong> that is used for actually drawing your model. Usually we start by defining our own frame to extend from the base JFrame, and set its properties in a constructor.
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				public class GameFrame extends JFrame {
+					public GameFrame(GameModel model) {
+						this.setTitle("My Game");
+						this.setPreferredSize(new Dimension(800, 600));
+						// Set the frame to be disposed when the top-right 'X' is clicked.
+						this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+						GamePanel gamePanel = new GamePanel(model);
+						this.setContentPane(gamePanel);
+						this.pack();
+						// Start with the frame centered in the screen.
+						this.setLocationRelativeTo(null);
+						// TODO: Setup listeners and game loop logic.
+					}
+				}
+			</code></pre>
+			<figcaption>Notice that we pass in our game model as a constructor argument. This is so that we can pass it to our <code>GamePanel</code>, which will ultimately be drawing the model.</figcaption>
+		</figure>
+		<p>
+			Inside the frame, there's a single <code>GamePanel</code> that we give a reference to the game model. This panel is responsible for rendering the model to the screen, and usually we can just define it as a child class of Swing's <code>JPanel</code>.
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				public class GamePanel extends JPanel {
+					private GameModel model;
+
+					public GamePanel(GameModel model) {
+						this.model = model;
+					}
+
+					@Override
+					protected void paintComponent(Graphics g) {
+						super.paintComponent(g);
+						Graphics2D g2 = (Graphics2D) g;
+						g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+						g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+						g2.setColor(Color.BLACK);
+						g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+						// TODO: Draw model on screen.
+					}
+				}
+			</code></pre>
+			<figcaption>To draw on a panel, all you need to do is override <code>paintComponent</code>. The Javadoc advise calling the super method to avoid graphical bugs, so we do that first. Then we set some rendering hints to turn on anti-aliasing and how strokes (outlines) are rendered. Finally we clear the screen to a black rectangle.</figcaption>
+		</figure>
+	</section>
+	<section id="game_loop">
+		<h3>The Game Loop</h3>
+		<p>
+			First of all, this guide won't go too in-depth about the details of game loops in general, but focuses specifically on their implementation with Java/Swing. For more information, you can read <a href="https://gameprogrammingpatterns.com/game-loop.html">this excellent article on the subject</a>.
+		</p>
+		<p>
+			In Swing GUIs, your application is by-default multi-threaded, since Swing has its own thread for managing the user interface. In order to run our game and not interfere with Swing's own GUI processing, we should have our game update logic run in its own thread. The thread should periodically update the model, according to some defined frequency, and it should also trigger the rendering of frames of your game, once again according to some defined frequency. In the example below, we update physics 60 times per second, and render the model also 60 times per second, but these values can easily be changed due to how I've set up the math.
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				public class GameUpdater extends Thread {
+					public static final double PHYSICS_FPS = 60.0;
+					public static final double MILLISECONDS_PER_PHYSICS_TICK = 1000.0 / PHYSICS_FPS;
+					public static final double PHYSICS_SPEED = 1.0;
+
+					public static final double DISPLAY_FPS = 60.0;
+					public static final double MILLISECONDS_PER_DISPLAY_FRAME = 1000.0 / DISPLAY_FPS;
+
+					private final GameModel model;
+					private final GamePanel gamePanel;
+					private volatile boolean running = true;
+
+					public GameUpdater(GameModel model, GamePanel gamePanel) {
+						this.model = model;
+						this.gamePanel = gamePanel;
+					}
+
+					public void setRunning(boolean running) {
+						this.running = running;
+					}
+
+					@Override
+					public void run() {
+						long lastPhysicsUpdate = System.currentTimeMillis();
+						long lastDisplayUpdate = System.currentTimeMillis();
+						while (this.running) {
+							long currentTime = System.currentTimeMillis();
+							long timeSinceLastPhysicsUpdate = currentTime - lastPhysicsUpdate;
+							long timeSinceLastDisplayUpdate = currentTime - lastDisplayUpdate;
+							if (timeSinceLastPhysicsUpdate >= MILLISECONDS_PER_PHYSICS_TICK) {
+								double elapsedSeconds = timeSinceLastPhysicsUpdate / 1000.0;
+								this.updateModelPhysics(elapsedSeconds * PHYSICS_SPEED);
+								lastPhysicsUpdate = currentTime;
+								timeSinceLastPhysicsUpdate = 0L;
+							}
+							if (timeSinceLastDisplayUpdate >= MILLISECONDS_PER_DISPLAY_FRAME) {
+								this.gamePanel.repaint();
+								lastDisplayUpdate = currentTime;
+								timeSinceLastDisplayUpdate = 0L;
+							}
+							long timeUntilNextPhysicsUpdate = (long) (MILLISECONDS_PER_PHYSICS_TICK - timeSinceLastPhysicsUpdate);
+							long timeUntilNextDisplayUpdate = (long) (MILLISECONDS_PER_DISPLAY_FRAME - timeSinceLastDisplayUpdate);
+
+							// Sleep to reduce CPU usage.
+							try {
+								Thread.sleep(Math.min(timeUntilNextPhysicsUpdate, timeUntilNextDisplayUpdate));
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+					// Other methods omitted for brevity.
+				}
+			</code></pre>
+			<figcaption>Basically, our game loop logic runs continuously until something else sets the <code>running</code> flag to <strong>false</strong>. During the loop, we determine how long it's been since the last physics and display updates, and if enough time has passed, we do an update and reset the "timeSince..." variable. To avoid wasting CPU usage on rapidly looping, we sleep until the next update.</figcaption>
+		</figure>
+		<p>
+			We can add our game updater thread to the end of our frame's constructor, so that when we initialize the game frame, the game loop begins.
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				public class GameFrame extends JFrame {
+					public GameFrame(GameModel model) {
+						this.setTitle("My Game");
+						this.setPreferredSize(new Dimension(800, 600));
+						// Set the frame to be disposed when the top-right 'X' is clicked.
+						this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+						GamePanel gamePanel = new GamePanel(model);
+						this.setContentPane(gamePanel);
+						this.pack();
+						// Start with the frame centered in the screen.
+						this.setLocationRelativeTo(null);
+
+						this.updater = new GameUpdater(model, gamePanel);
+						this.updater.start();
+						this.addWindowListener(new WindowAdapter() {
+							@Override
+							public void windowClosing(WindowEvent e) {
+								updater.setRunning(false);
+							}
+						});
+						// TODO: Setup listeners
+					}
+				}
+			</code></pre>
+		</figure>
+	</section>
+	<section id="listeners">
+		<h3>Listeners and Control</h3>
+		<p>
+			Most often, you'll want something to happen when the player presses a key or clicks the mouse. To do this, you should create your own class which extends from <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/KeyAdapter.html">KeyAdapter</a> or <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/MouseAdapter.html">MouseAdapter</a>, depending on what you want to do.
+			<br>
+			<small><em>You can also directly implement <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/KeyListener.html">KeyListener</a> and <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/MouseListener.html">MouseListener</a> at the same time, but this isn't as clean, and you have to implement every method declared in the interfaces, even if you aren't using them.</em></small>
+		</p>
+		<p>
+			Let's take a look at a common case: doing something when a key is pressed. To do so, we override the KeyAdapter's <code>keyPressed</code> method like so:
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				@Override
+				public void keyPressed(KeyEvent e) {
+					int c = e.getKeyCode();
+					if (c == KeyEvent.VK_W) {
+						player.getShip().forwardThrusterEnabled = true;
+					} else if (c == KeyEvent.VK_A) {
+						player.getShip().turningLeft = true;
+					} else if (c == KeyEvent.VK_D) {
+						player.getShip().turningRight = true;
+					}
+				}
+			</code></pre>
+			<figcaption>To check what key was pressed, we call <code>getKeyCode()</code> on the key event that was received, and then check if it matches one of the constants defined in the <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/KeyEvent.html">KeyEvent</a> class, and if so, then we do something to our player. In this case, we set some boolean flags that indicate how the player's ship is trying to move.</figcaption>
+		</figure>
+		<p>
+			Handling mouse events works almost the same way, but instead we check what button of the mouse was pressed.
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int b = e.getButton();
+					if (b == MouseEvent.BUTTON1) {
+						System.out.printf("Player clicked at x=%d, y=%d\n", e.getX(), e.getY());
+						player.getShip().firingBlaster = true;
+					}
+				}
+			</code></pre>
+			<figcaption>In this example, I show both checking which button was pressed, and also checking where the button was pressed. <code>getX()</code> and <code>getY()</code> return the x- and y-coordinates relative to the <em>source component</em>, which will most often be the JFrame or JPanel that the user clicked on.</figcaption>
+		</figure>
+	</section>
+	<a href="../blog.html">Back to Dev Discussions</a>
+</article>
+<script src="../../js/prism.js"></script>
+<script src="../../js/themes.js"></script>
+</body>
+</html>

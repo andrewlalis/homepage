@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>A Beginner's Guide to Searching With Lucene</title>
+	<meta charset="utf-8"/>
+	<meta name="description" content="A simple, easy-to-follow guide that walks you through creating your first index, and searching through it with queries."/>
+	<link rel="stylesheet" href="../../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/prism.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/blog-article.css" type="text/css"/>
+</head>
+<body>
+
+<article>
+	<header>
+		<h1>A Beginner's Guide to Searching With Lucene</h1>
+		<p>
+			<em>Written on <time>6 February, 2023</time>, by Andrew Lalis.</em>
+		</p>
+	</header>
+	<section>
+		<p>
+			Nowadays, if you want to build the next fancy new web app, chances are pretty good that you'll need a search bar in it, and for that, you've probably heard of <a class="link_external" target="_blank" href="https://elastic.co">ElasticSearch</a>, or some other fancy, all-in-one solution. However, in this article, I'd like to try and convince you that you don't need any of that, and instead, you can brew up your own homemade search feature using <a class="link_external" target="_blank" href="https://lucene.apache.org/">Apache Lucene</a>.
+		</p>
+		<p>
+			Hopefully you'll be surprised by how easy it is.
+		</p>
+	</section>
+	<section>
+		<h3>The Use Case</h3>
+		<p>
+			Before we dive into the code, it's important to make sure that you actually need an indexing and searching tool that goes beyond simple SQL queries.
+		</p>
+		<p>
+			If you can answer "yes" to any of these questions, then continue right along:
+		</p>
+		<ul>
+			<li>I want to search over multiple different types of entities.</li>
+			<li>I want to prioritize matching certain fields from entities over other fields. (For example, a user's name should be more important than their nickname.)</li>
+			<li>I'm okay with search results being eventually consistent (that is, it might take a moment for new data to appear in results).</li>
+			<li>I want to search for results that match a wildcard search. (For example, <em>"find all animals whose name matches <code>tig*</code>.</em></li>
+		</ul>
+	</section>
+	<section>
+		<h3>Indexing and Searching Basics</h3>
+		<p>
+			No matter what searching solution you end up choosing, they all generally follow the same approach:
+		</p>
+		<ol>
+			<li>Ingest data and produce an index.</li>
+			<li>Search for data quickly using the index.</li>
+		</ol>
+		<p>
+			In most situations, <em>ingesting data</em> roughly translates to scraping content from a database or message queue, or even CSV content. The contents of each entity are analyzed and the important bits are extracted and stored in a compressed format that's optimized for high-speed searching. The exact implementation depends on what sort of solution you choose, but a lot of databases use a sort of red-black tree structure.
+		</p>
+		<p>
+			Searching over your index involves parsing a user's query (and sanitizing it, if necessary), and then constructing a well-formed query that's accepted by your searching solution, possibly with different weights or criteria applied to different fields.
+		</p>
+		<p>
+			This is no different for Lucene, and in this guide, we'll go through how to create an index and search through it.
+		</p>
+	</section>
+
+	<hr>
+
+	<section>
+		<h3>Setting Up a New Project</h3>
+		<p>
+			In this guide, I'll be creating a small Java program for searching over a huge set of airports which is available for free here: <a class="link_external" target="_blank" href="https://ourairports.com/data/">https://ourairports.com/data/</a>. The full source code for this project is <a class="link_external" target="_blank" href="https://github.com/andrewlalis/SampleLuceneSearch">available on GitHub</a>, if you'd like to take a look.
+		</p>
+		<p>
+			I'll be using Maven as the build tool of choice, but feel free to use whatever you'd like.
+		</p>
+		<p>
+			We start by creating a new project, and add the <a class="link_external" target="_blank" href="https://mvnrepository.com/artifact/org.apache.lucene/lucene-core">apache-lucene</a> dependency, and the <a class="link_external" target="_blank" href="https://commons.apache.org/proper/commons-csv/">Apache Commons CSV</a> library for parsing the CSV dataset.
+		</p>
+		<figure>
+			<pre><code class="language-xml">
+				&lt;dependencies&gt;
+					&lt;!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-core --&gt;
+					&lt;dependency&gt;
+						&lt;groupId&gt;org.apache.lucene&lt;/groupId&gt;
+						&lt;artifactId&gt;lucene-core&lt;/artifactId&gt;
+						&lt;version&gt;9.5.0&lt;/version&gt;
+					&lt;/dependency&gt;
+					&lt;!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv --&gt;
+					&lt;dependency&gt;
+						&lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+						&lt;artifactId&gt;commons-csv&lt;/artifactId&gt;
+						&lt;version&gt;1.10.0&lt;/version&gt;
+					&lt;/dependency&gt;
+				&lt;/dependencies&gt;
+			</code></pre>
+		</figure>
+	</section>
+	<section>
+		<h3>Parsing the Data</h3>
+		<p>
+			First of all, we need to parse the CSV data into a programming construct that we can use elsewhere in our code. In this case, I've defined the <code>Airport</code> record like so:
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				public record Airport(
+						long id,
+						String ident,
+						String type,
+						String name,
+						double latitude,
+						double longitude,
+						Optional&lt;Integer&gt; elevationFt,
+						String continent,
+						String isoCountry,
+						String isoRegion,
+						String municipality,
+						boolean scheduledService,
+						Optional&lt;String&gt; gpsCode,
+						Optional&lt;String&gt; iataCode,
+						Optional&lt;String&gt; localCode,
+						Optional&lt;String&gt; homeLink,
+						Optional&lt;String&gt; wikipediaLink,
+						Optional&lt;String&gt; keywords
+				) {}
+			</code></pre>
+		</figure>
+		<p>
+			And a simple <code>AirportParser</code> class that just reads in a CSV file and returns a <code>List&lt;Airport&gt;</code> (Check the source code to see how I did that).
+		</p>
+		<p>
+			Now that we've got our list of entities, we can build an index from them.
+		</p>
+	</section>
+
+	<section>
+		<h3>Indexing</h3>
+		<p>
+			In order to efficiently search over a massive set of data, we need to prepare a special set of index files that Lucene can read during searches. To do that, we need to create a new directory for the index to live in, construct a new <a class="link_external" target="_blank" href="https://javadoc.io/doc/org.apache.lucene/lucene-core/latest/org/apache/lucene/index/IndexWriter.html">IndexWriter</a>, and create a <a class="link_external" target="_blank" href="https://javadoc.io/doc/org.apache.lucene/lucene-core/latest/org/apache/lucene/document/Document.html">Document</a> for each airport we're indexing.
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				public static void buildIndex(List&lt;Airport&gt; airports) throws IOException {
+					Path indexDir = Path.of("airports-index");
+					// We use a try-with-resources block to prepare the components needed for writing the index.
+					try (
+						Analyzer analyzer = new StandardAnalyzer();
+						Directory luceneDir = FSDirectory.open(indexDir)
+					) {
+						IndexWriterConfig config = new IndexWriterConfig(analyzer);
+						config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+						IndexWriter indexWriter = new IndexWriter(luceneDir, config);
+						for (var airport : airports) {
+							// Create a new document for each airport.
+							Document doc = new Document();
+							doc.add(new StoredField("id", airport.id()));
+							doc.add(new TextField("ident", airport.ident(), Field.Store.YES));
+							doc.add(new TextField("type", airport.type(), Field.Store.YES));
+							doc.add(new TextField("name", airport.name(), Field.Store.YES));
+							doc.add(new TextField("continent", airport.continent(), Field.Store.YES));
+							doc.add(new TextField("isoCountry", airport.isoCountry(), Field.Store.YES));
+							doc.add(new TextField("municipality", airport.municipality(), Field.Store.YES));
+							doc.add(new IntPoint("elevationFt", airport.elevationFt().orElse(0)));
+							doc.add(new StoredField("elevationFt", airport.elevationFt().orElse(0)));
+							if (airport.wikipediaLink().isPresent()) {
+								doc.add(new StoredField("wikipediaLink", airport.wikipediaLink().get()));
+							}
+							// And add it to the writer.
+							indexWriter.addDocument(doc);
+						}
+						indexWriter.close();
+					}
+				}
+			</code></pre>
+			<figcaption>Note that some of the airport's properties are <code>Optional</code>, so we need to be a little careful to not end up with unexpected null values in our documents.</figcaption>
+		</figure>
+		<p>
+			An important takeaway here is the construction of the <code>Document</code>. There are a variety of fields that you could add to your document, which have different effects on the search.
+		</p>
+		<ul>
+			<li><em>StoredFields</em> are fields that just store plain data, but can't be searched on. In the above code, we store the id and wikipedia link, since they might be nice to have when fetching results, but nobody is going to want to search for airports by our internal id.</li>
+			<li><em>TextFields</em> are fields that allow for a full-text search of its value. This is generally the most popular "searchable" field type. It also allows us to specify whether or not we want to store its value, just like with a StoredField. In our case, we do want to store all our fields.</li>
+		</ul>
+		<p>
+			For more information about the types of fields that you can use, <a class="link_external" target="_blank" href="https://javadoc.io/doc/org.apache.lucene/lucene-core/latest/org/apache/lucene/index/package-summary.html">check the Lucene documentation</a>. It's very well-written.
+		</p>
+		<p>
+			Also important to note is that once a document is added, it's staying in the index until either the index is removed or overwritten, or the document is deleted through another IndexWriter method. I'd suggest reading the documentation if you'd like to learn more about how to dynamically update a <em>living</em> index that grows with your data. But for 95% of use cases, regenerating the search index occasionally is just fine.
+		</p>
+	</section>
+
+	<section>
+		<h3>Searching</h3>
+		<p>
+			Now that we've built an index from our dataset, we can search over it to find the most relevant results for a user's query.
+		</p>
+		<p>
+			The following code might look a bit daunting, but I've added some comments to explain what's going on, and I'll walk you through the process below.
+		</p>
+		<figure>
+			<pre><code class="language-java">
+				public static List&lt;String&gt; searchAirports(String rawQuery) {
+					Path indexDir = Path.of("airports-index");
+					// If the query is empty or there's no index, quit right away.
+					if (rawQuery == null || rawQuery.isBlank() || Files.notExists(indexDir)) return new ArrayList<>();
+			
+					// Prepare a weight for each of the fields we want to search on.
+					Map&lt;String, Float&gt; fieldWeights = Map.of(
+							"name", 3f,
+							"municipality", 2f,
+							"ident", 2f,
+							"type", 1f,
+							"continent", 0.25f
+					);
+			
+					// Build a boolean query made up of "boosted" wildcard term queries, that'll match any term.
+					BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
+					String[] terms = rawQuery.toLowerCase().split("\\s+");
+					for (String term : terms) {
+						// Make the term into a wildcard term, where we match any field value starting with the given text.
+						// For example, "airp*" will match "airport" and "airplane", but not "airshow".
+						// This is usually the natural way in which people like to search.
+						String wildcardTerm = term + "*";
+						for (var entry : fieldWeights.entrySet()) {
+							String fieldName = entry.getKey();
+							float weight = entry.getValue();
+							Query baseQuery = new WildcardQuery(new Term(fieldName, wildcardTerm));
+							queryBuilder.add(new BoostQuery(baseQuery, weight), BooleanClause.Occur.SHOULD);
+						}
+					}
+					Query query = queryBuilder.build();
+			
+					// Use the query we built to fetch up to 10 results.
+					try (var reader = DirectoryReader.open(FSDirectory.open(indexDir))) {
+						IndexSearcher searcher = new IndexSearcher(reader);
+						List&lt;String&gt; results = new ArrayList&lt;&gt;(10);
+						TopDocs topDocs = searcher.search(query, 10, Sort.RELEVANCE, false);
+						for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+							Document doc = searcher.storedFields().document(scoreDoc.doc);
+							results.add(doc.get("name"));
+						}
+						return results;
+					} catch (IOException e) {
+						System.err.println("Failed to search index.");
+						e.printStackTrace();
+						return new ArrayList&lt;&gt;();
+					}
+				}
+			</code></pre>
+		</figure>
+		<ol>
+			<li>We check to make sure that the user's query is legitimate. If it's just empty or null, we can exit right away and return an empty result.</li>
+			<li>Since we want to make some fields have a greater effect than others, we prepare a mapping that specifies a <em>weight</em> for each field.</li>
+			<li>In Lucene, the <code>Query</code> object is passed to an index searcher to do the searching. But first, we need to build such a query. In our case, we want to match each term the user enters against any of the fields we've added a weight for. By using a BooleanQuery, we can construct this as a big OR clause, where each term is a wildcard query that's <em>boosted</em> by the weight of the field it applies to.</li>
+			<li>Finally, we open up a DirectoryReader on the index directory, create an IndexSearcher, and get our results. The searcher produces a <code>TopDocs</code> object that has a <code>scoreDocs</code> property containing the list of document ids that appear in the results. We can use the searcher to lookup the stored fields of each document in the result set, and in this case, we just fetch the <em>name</em> of the airport.</li>
+		</ol>
+		<p>
+			That's it! In my sample project, the whole Lucene implementation for indexing and searching, <em>including imports and comments</em>, is less than 150 lines of pure Java! It's so simple that it can just be tucked away into a single class.
+		</p>
+		<p>
+			Now, with your newfound knowledge, go forth and build advanced search features into your apps, and be content that you've built your solution from the ground up, <em>without</em> reinventing the wheel or getting roped into a complex cloud solution.
+		</p>
+		<p>
+			Once again, my sample code is <a class="link_external" target="_blank" href="https://github.com/andrewlalis/SampleLuceneSearch">available on GitHub here</a>.
+		</p>
+	</section>
+
+	
+	<a href="../blog.html">Back to Dev Discussions</a>
+</article>
+<script src="../../js/prism.js"></script>
+<script src="../../js/themes.js"></script>
+</body>
+</html>

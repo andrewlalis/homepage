@@ -1,0 +1,11 @@
+article {
+    background-color: var(--background-color-2);
+}
+
+figure {
+    margin: 0.5em;
+}
+
+code {
+    font-size: x-small;
+}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DSH - Easier Scripting in D</title>
+	<meta charset="utf-8"/>
+	<meta name="description" content="DSH is a library I developed to make it easier to write scripts in the D programming language."/>
+	<link rel="stylesheet" href="../../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/prism.css" type="text/css"/>
+	<link rel="stylesheet" href="../../css/blog-article.css" type="text/css"/>
+</head>
+<body>
+
+<article>
+	<header>
+		<h1>DSH - Easier Scripting in D</h1>
+		<p>
+			<em>Written on <time>5 May, 2022</time>, by Andrew Lalis.</em>
+		</p>
+	</header>
+	<section>
+		<p>
+			You're probably used to writing your automation scripts in a language like Bash, Powershell, Ruby, or Python. With DSH, it can be just as easy to write those scripts in D. I've designed DSH as a combination of a standalone programming library, and a set of tools to facilitate faster development and deployment. This article will discuss some of the basic use cases and how DSH works to make it easier to accomplish them.
+		</p>
+		<p>
+			In case you're interested, you can check out DSH on <a class="link_external" href="https://code.dlang.org/packages/dsh">code.dlang.org</a> or on <a class="link_external" href="https://github.com/andrewlalis/dsh">GitHub</a>.
+		</p>
+	</section>
+	<section>
+		<h3>Why write scripts in D?</h3>
+		<p>
+			While many people are used to scripting in languages that have been built over the years specifically for that use case, this introduces extra complexity into projects that are mainly built using some other language. In an ideal world, we'd use one single language to describe everything about our app, from the way it looks, to how we compile and distribute it. DSH is my attempt to make this a reality, at least for applications written in D. When developing D programs that require some auxiliary scripts, you don't have to make a cognitive jump to another language; just keep writing code in the environment you're most efficient in. This way, we reap the benefits of specializing in becoming an expert in a single language and its ecosystem.
+		</p>
+		<p>
+			If you're still not fully convinced, that's alright; read ahead and see if any of my examples can sway your opinion.
+		</p>
+	</section>
+	<section>
+		<h3>Writing Your Script</h3>
+		<p>
+			There are two main ways to write scripts using DSH:
+		</p>
+		<ul>
+			<li>
+				Add a <code>dub.sdl</code> package descriptor to the top of your file, and an executable shebang. For example:
+				<pre><code class="language-d">
+					#!/usr/bin/env dub
+					/+ dub.sdl:
+						dependency "dsh" version="~>1.6.1"
+					+/
+					import dsh;
+
+					void main() {
+						print("Hello world!");
+					}
+				</code></pre>
+				Execute this script via <code>./my_script.d</code>
+			</li>
+			<li>
+				Use the single-file <code>dshs.d</code> version of DSH, for compiled scripts which don't use the dub package manager:
+				<pre><code class="language-d">
+					import dsh;
+
+					void main() {
+						print("Hello world!");
+					}
+				</code></pre>
+				Executing these scripts involves compiling them first. <code>dmd my_script.d /usr/include/dshs.d && ./my_script</code>
+			</li>
+		</ul>
+		<p>
+			Generally, the <em>dynamic</em> form is more useful for scripts you'd like to distribute to anyone, since they only require the user to have the D toolchain installed in order to run it. However, it is slower, since the script and all its dependencies must be compiled on-the-fly.
+		</p>
+		<p>
+			Alternatively, the <em>static</em> form is more useful for complex scripts that are best pre-compiled, or for when you don't want to use the dub package manager, just a D compiler.
+		</p>
+		<p>
+			Luckily for either of these solutions, DSH comes with a <code>dshutil</code> tool to help you get started. You can install it like so:
+			<pre><code class="language-bash">
+				wget https://raw.githubusercontent.com/andrewlalis/dsh/main/tools/dshutil.d -O dshutil.d
+				chmod +x dshutil.d
+				./dshutil.d install
+			</code></pre>
+			I won't go into all the features of dshutil here, since you can read the full documentation on <a class="link_external" href="https://github.com/andrewlalis/dsh/tree/main/tools">GitHub</a>, but in short, it provides shortcuts for creating boilerplate scripts, automatically compiling when changes are detected, and gives you access to the dshs.d single-file library for static scripts.
+		</p>
+	</section>
+
+	<section>
+		<h3>Helper Functions</h3>
+		<p>
+			While dshutil is a handy tool on its own, the real benefit of using DSH is its library of helper functions which are designed specifically for scripting tasks.
+		</p>
+
+		<h4>File Utilities</h4>
+		<p>
+			DSH offers quite a few helpful functions that reduce the verbosity of your IO operations. Below is a sampling of some of the most prominent functions.
+		</p>
+		<pre><code class="language-d">
+			import dsh;
+
+			void main() {
+				copyDir("fromdir", "todir");
+				string filename = findFile("dir", "config\\.json");
+				string[] files = findFiles("dir", "^config.*$");
+				string[] dFiles = findFilesByExtension("dir", ".d");
+				string home = getHomeDir();
+				removeAnyIfExists(dFiles);
+			}
+		</code></pre>
+
+		<h4>Process Utilities</h4>
+		<p>
+			In addition to the functions in D's <code>std.process</code> module, DSH provides some shortcuts for scripts to make it easy to manage processes.
+		</p>
+		<pre><code class="language-d">
+			import dsh;
+
+			void main() {
+				run("cat out.txt");
+				runOrQuit("git pull"); // exits the program if the process fails.
+				setEnv("MY_VAR", "TRUE");
+				print(getEnv("MY_VAR"));
+			}
+		</code></pre>
+		<p>
+			Also included is a <code>ProcessBuilder</code> class with which you can use a fluent method interface to construct processes with custom input and output sources and environments.
+		</p>
+	</section>
+	<a href="../blog.html">Back to Dev Discussions</a>
+</article>
+<script src="../../js/prism.js"></script>
+<script src="../../js/themes.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{TEMPLATE_TITLE}}</title>
+	<meta charset="utf-8"/>
+	<meta name="description" content="{{TEMPLATE_DESCRIPTION}}"/>
+	<link rel="stylesheet" href="../styles/font.css" type="text/css">
+
+	<!-- CSS class to hide elements if JS is not enabled. -->
+	<noscript><style>.jsonly{display: none !important;}</style></noscript>
+
+	<script>
+		// An inline script that manages the site's color theme.
+		const THEMES = ["light", "dark"];
+
+		function getPreferredTheme() {
+			const storedTheme = localStorage.getItem("theme");
+			if (storedTheme !== null && THEMES.includes(storedTheme)) return storedTheme;
+			if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+				return "dark";
+			}
+			return "light";
+		}
+
+		function setPreferredTheme(theme) {
+			document.documentElement.className = theme;
+			localStorage.setItem("theme", theme);
+		}
+
+		setPreferredTheme(getPreferredTheme());
+		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
+			const newTheme = event.matches ? "dark" : "light";
+			setPreferredTheme(newTheme);
+		});
+		document.addEventListener("DOMContentLoaded", event => {
+			const themeToggleButton = document.getElementById("themeToggleButton");
+			themeToggleButton.onclick = clickEvent => {
+				const currentTheme = getPreferredTheme();
+				const idx = THEMES.indexOf(currentTheme);
+				const nextIdx = idx === THEMES.length - 1 ? 0 : idx + 1;
+				setPreferredTheme(THEMES[nextIdx]);
+			};
+		});
+	</script>
+
+	<link rel="stylesheet" href="../styles/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../styles/article.css" type="text/css"/>
+	<link rel="stylesheet" href="../vendor/prism.css" type="text/css"/>
+	<script src="../vendor/prism.js"></script>
+</head>
+<body>
+
+<header class="page-header">
+	<h1>{{TEMPLATE_TITLE}}</h1>
+	<nav>
+		<div>
+			<a href="../index.html">Home</a>
+			<a class="page-header-selected" href="../articles.html">Articles</a>
+			<a href="../projects.html">Projects</a>
+			<a href="../training.html">Training</a>
+			<a href="../contact.html">Contact</a>
+		</div>
+		<div>
+			<a href="https://github.com/andrewlalis">GitHub</a>
+			<a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+			<a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+		</div>
+	</nav>
+	<button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+	<hr>
+	<p>
+		<em>Written on <time>{{TEMPLATE_TIME}}</time>, by Andrew Lalis.</em>
+	</p>
+</header>
+
+<article>
+	
+	<section>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dignissim feugiat tortor. Donec non gravida massa. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam eleifend nunc placerat ante suscipit consequat. Nulla tempor pellentesque mollis. Nam malesuada risus urna, ac fermentum dui egestas sit amet. Ut vel tellus eros. Phasellus massa erat, dignissim ac arcu non, vestibulum rhoncus diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pharetra pretium purus, et tempus elit tristique maximus. Donec imperdiet, enim et consequat pharetra, purus augue congue nulla, a hendrerit nulla est id augue. Aliquam erat volutpat. Fusce eu lorem purus.
+		</p>
+		<p>
+			Curabitur lobortis convallis nunc interdum mattis. Suspendisse tincidunt nec mi in elementum. Vestibulum eu sagittis felis, at bibendum odio. Quisque tortor mi, convallis ut nulla id, scelerisque scelerisque eros. Duis convallis enim lorem, sit amet congue ipsum eleifend et. Phasellus finibus elit nibh, nec sodales nisi vehicula quis. Quisque a elit nec turpis maximus posuere id ac turpis. Aliquam efficitur accumsan tortor, sit amet hendrerit eros faucibus eget. Mauris non est in lectus hendrerit varius pellentesque at ante. Morbi sit amet suscipit ligula, vitae condimentum quam. Etiam diam nunc, vehicula a fermentum nec, varius nec diam. Etiam elit tellus, mattis eu libero quis, faucibus varius est. <a href="https://google.com">Here is a link to Google.com.</a>
+		</p>
+		<figure>
+			<pre><code class="language-java line-numbers">
+				/**
+				 * Shortcut for getting a property.
+				 * @param key The property's key.
+				 * @return The value for that property.
+				 */
+				public static String getProp(String key) {
+					return getInstance().getProperties().getProperty(key);
+				}
+			</code></pre>
+			<figcaption>This is a code snippet with line numbers.</figcaption>
+		</figure>
+	</section>
+
+	<section>
+		<h3>Subsection</h3>
+		<p>
+			Praesent elementum quam in odio sodales, vel suscipit massa dignissim. Aenean id molestie lectus. Vestibulum eu magna scelerisque dui elementum molestie. Vestibulum vitae interdum felis. In rutrum turpis at posuere fermentum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis porta blandit blandit. Morbi ut vehicula metus, tristique ultrices justo. Vivamus ullamcorper convallis tempus. In et laoreet quam. Maecenas lobortis, enim ut tincidunt ultricies, dui mauris dictum magna, vel facilisis nunc nisi at ligula.
+		</p>
+	</section>
+
+	<section>
+		<h3>Second Subsection</h3>
+		<p>
+			Some small text.
+		</p>
+		<figure>
+			<pre><code class="language-c">
+				void main(int argc, char** argv) {
+					printf("Hello world!\n");
+				}
+			</code></pre>
+		</figure>
+	</section>
+</article>
+
+</body>
+</html>
