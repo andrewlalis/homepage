@@ -4,12 +4,38 @@
 	<meta charset="UTF-8">
 	<title>Java + Swing 2D Games</title>
 	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Important information for programmers who want to make simple 2D games with Java using the Swing framework."/>
-	<link rel="stylesheet" href="../../css/style.css" type="text/css"/>
-	<link rel="stylesheet" href="../../css/prism.css" type="text/css"/>
-	<link rel="stylesheet" href="../../css/blog-article.css" type="text/css"/>
+
+	<link rel="stylesheet" href="../styles/font.css" type="text/css">
+    <script src="../scripts/themes.min.js"></script>
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    <link rel="stylesheet" href="../styles/style.css" type="text/css">
+	
+	<link rel="stylesheet" href="../styles/article.css" type="text/css">
+	<link rel="stylesheet" href="../vendor/prism.css" type="text/css"/>
 </head>
 <body>
+
+<header class="page-header">
+	<h1>Andrew's Articles</h1>
+	<nav>
+		<div>
+			<a href="../index.html">Home</a>
+			<a class="page-header-selected" href="../articles.html">Articles</a>
+			<a href="../projects.html">Projects</a>
+			<a href="../training.html">Training</a>
+			<a href="../contact.html">Contact</a>
+		</div>
+		<div>
+			<a href="https://github.com/andrewlalis">GitHub</a>
+			<a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+			<a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+		</div>
+	</nav>
+	<button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+	<hr>
+</header>
 
 <article>
 	<header>
@@ -35,7 +61,7 @@
 		</ul>
 	</section>
 	<section id="mvc">
-		<h3>Model-View-Control Design</h3>
+		<h2>Model-View-Control Design</h2>
 		<p>
 			At first, it's super easy to make a new JFrame and start drawing on it, and you can add action listeners everywhere, whenever they're needed. If you ever plan on expanding beyond a simple 20-line drawing method however, you should organize your code using the <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">Model-View-Controller</a> pattern. For example, in my <a href="https://github.com/andrewlalis/BeforeAsteroids/tree/main/src/main/java/nl/andrewlalis"><em>Before Asteroids</em></a> sample game, I have split up my code into a few different packages.
 		</p>
@@ -54,7 +80,7 @@
 		</p>
 	</section>
 	<section id="swing_setup">
-		<h3>Setting up a Swing GUI</h3>
+		<h2>Setting up a Swing GUI</h2>
 		<p>
 			Making a Swing GUI usually consists of two basic components: the <strong>JFrame</strong> that acts as your application's window, and a <strong>JPanel</strong> that is used for actually drawing your model. Usually we start by defining our own frame to extend from the base JFrame, and set its properties in a constructor.
 		</p>
@@ -105,7 +131,7 @@
 		</figure>
 	</section>
 	<section id="game_loop">
-		<h3>The Game Loop</h3>
+		<h2>The Game Loop</h2>
 		<p>
 			First of all, this guide won't go too in-depth about the details of game loops in general, but focuses specifically on their implementation with Java/Swing. For more information, you can read <a href="https://gameprogrammingpatterns.com/game-loop.html">this excellent article on the subject</a>.
 		</p>
@@ -202,7 +228,7 @@
 		</figure>
 	</section>
 	<section id="listeners">
-		<h3>Listeners and Control</h3>
+		<h2>Listeners and Control</h2>
 		<p>
 			Most often, you'll want something to happen when the player presses a key or clicks the mouse. To do this, you should create your own class which extends from <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/KeyAdapter.html">KeyAdapter</a> or <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/event/MouseAdapter.html">MouseAdapter</a>, depending on what you want to do.
 			<br>
@@ -244,9 +270,8 @@
 			<figcaption>In this example, I show both checking which button was pressed, and also checking where the button was pressed. <code>getX()</code> and <code>getY()</code> return the x- and y-coordinates relative to the <em>source component</em>, which will most often be the JFrame or JPanel that the user clicked on.</figcaption>
 		</figure>
 	</section>
-	<a href="../blog.html">Back to Dev Discussions</a>
+	<a href="../articles.html">Back to Articles</a>
 </article>
-<script src="../../js/prism.js"></script>
-<script src="../../js/themes.js"></script>
+<script src="../vendor/prism.js"></script>
 </body>
 </html>

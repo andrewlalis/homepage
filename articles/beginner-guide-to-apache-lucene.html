@@ -4,12 +4,38 @@
 	<meta charset="UTF-8">
 	<title>A Beginner's Guide to Searching With Lucene</title>
 	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="A simple, easy-to-follow guide that walks you through creating your first index, and searching through it with queries."/>
-	<link rel="stylesheet" href="../../css/style.css" type="text/css"/>
-	<link rel="stylesheet" href="../../css/prism.css" type="text/css"/>
-	<link rel="stylesheet" href="../../css/blog-article.css" type="text/css"/>
+	
+	<link rel="stylesheet" href="../styles/font.css" type="text/css">
+    <script src="../scripts/themes.min.js"></script>
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    <link rel="stylesheet" href="../styles/style.css" type="text/css">
+	
+	<link rel="stylesheet" href="../styles/article.css" type="text/css">
+	<link rel="stylesheet" href="../vendor/prism.css" type="text/css"/>
 </head>
 <body>
+
+<header class="page-header">
+	<h1>Andrew's Articles</h1>
+	<nav>
+		<div>
+			<a href="../index.html">Home</a>
+			<a class="page-header-selected" href="../articles.html">Articles</a>
+			<a href="../projects.html">Projects</a>
+			<a href="../training.html">Training</a>
+			<a href="../contact.html">Contact</a>
+		</div>
+		<div>
+			<a href="https://github.com/andrewlalis">GitHub</a>
+			<a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+			<a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+		</div>
+	</nav>
+	<button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+	<hr>
+</header>
 
 <article>
 	<header>
@@ -27,7 +53,7 @@
 		</p>
 	</section>
 	<section>
-		<h3>The Use Case</h3>
+		<h2>The Use Case</h2>
 		<p>
 			Before we dive into the code, it's important to make sure that you actually need an indexing and searching tool that goes beyond simple SQL queries.
 		</p>
@@ -42,7 +68,7 @@
 		</ul>
 	</section>
 	<section>
-		<h3>Indexing and Searching Basics</h3>
+		<h2>Indexing and Searching Basics</h2>
 		<p>
 			No matter what searching solution you end up choosing, they all generally follow the same approach:
 		</p>
@@ -64,7 +90,7 @@
 	<hr>
 
 	<section>
-		<h3>Setting Up a New Project</h3>
+		<h2>Setting Up a New Project</h2>
 		<p>
 			In this guide, I'll be creating a small Java program for searching over a huge set of airports which is available for free here: <a class="link_external" target="_blank" href="https://ourairports.com/data/">https://ourairports.com/data/</a>. The full source code for this project is <a class="link_external" target="_blank" href="https://github.com/andrewlalis/SampleLuceneSearch">available on GitHub</a>, if you'd like to take a look.
 		</p>
@@ -94,7 +120,7 @@
 		</figure>
 	</section>
 	<section>
-		<h3>Parsing the Data</h3>
+		<h2>Parsing the Data</h2>
 		<p>
 			First of all, we need to parse the CSV data into a programming construct that we can use elsewhere in our code. In this case, I've defined the <code>Airport</code> record like so:
 		</p>
@@ -131,7 +157,7 @@
 	</section>
 
 	<section>
-		<h3>Indexing</h3>
+		<h2>Indexing</h2>
 		<p>
 			In order to efficiently search over a massive set of data, we need to prepare a special set of index files that Lucene can read during searches. To do that, we need to create a new directory for the index to live in, construct a new <a class="link_external" target="_blank" href="https://javadoc.io/doc/org.apache.lucene/lucene-core/latest/org/apache/lucene/index/IndexWriter.html">IndexWriter</a>, and create a <a class="link_external" target="_blank" href="https://javadoc.io/doc/org.apache.lucene/lucene-core/latest/org/apache/lucene/document/Document.html">Document</a> for each airport we're indexing.
 		</p>
@@ -187,7 +213,7 @@
 	</section>
 
 	<section>
-		<h3>Searching</h3>
+		<h2>Searching</h2>
 		<p>
 			Now that we've built an index from our dataset, we can search over it to find the most relevant results for a user's query.
 		</p>
@@ -260,12 +286,9 @@
 		<p>
 			Once again, my sample code is <a class="link_external" target="_blank" href="https://github.com/andrewlalis/SampleLuceneSearch">available on GitHub here</a>.
 		</p>
-	</section>
-
-	
-	<a href="../blog.html">Back to Dev Discussions</a>
+	</section>	
+	<a href="../articles.html">Back to Articles</a>
 </article>
-<script src="../../js/prism.js"></script>
-<script src="../../js/themes.js"></script>
+<script src="../vendor/prism.js"></script>
 </body>
 </html>

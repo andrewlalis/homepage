@@ -6,45 +6,10 @@
     <meta charset="utf-8">
     <meta name="description" content="The Homepage of Andrew Lalis.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="styles/font.css" type="text/css">
-
-    <!-- CSS class to hide elements if JS is not enabled. -->
+    <script src="scripts/themes.min.js"></script>
     <noscript><style>.jsonly{display: none !important;}</style></noscript>
-    
-    <script>
-        // An inline script that manages the site's color theme.
-        const THEMES = ["light", "dark"];
-
-        function getPreferredTheme() {
-            const storedTheme = localStorage.getItem("theme");
-            if (storedTheme !== null && THEMES.includes(storedTheme)) return storedTheme;
-            if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                return "dark";
-            }
-            return "light";
-        }
-
-        function setPreferredTheme(theme) {
-            document.documentElement.className = theme;
-            localStorage.setItem("theme", theme);
-        }
-
-        setPreferredTheme(getPreferredTheme());
-        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
-            const newTheme = event.matches ? "dark" : "light";
-            setPreferredTheme(newTheme);
-        });
-        document.addEventListener("DOMContentLoaded", event => {
-            const themeToggleButton = document.getElementById("themeToggleButton");
-            themeToggleButton.onclick = clickEvent => {
-                const currentTheme = getPreferredTheme();
-                const idx = THEMES.indexOf(currentTheme);
-                const nextIdx = idx === THEMES.length - 1 ? 0 : idx + 1;
-                setPreferredTheme(THEMES[nextIdx]);
-            };
-        });
-    </script>
-
     <link rel="stylesheet" href="styles/style.css" type="text/css">
 </head>
 
@@ -79,7 +44,7 @@
         <article>
             <h2>About this Site</h2>
             <p>
-                This page was written by me, Andrew Lalis, to be my personal website on the world-wide-web. It's got all the usual stuff that a personal site should have, like important links and contact details, plus a little series of articles I've written about my experiences with programming, lifting, gaming, or anything else of interest.
+                This page was hand-written by me, Andrew Lalis, to be my personal website on the world-wide-web. It's got all the usual stuff that a personal site should have, like important links and contact details, plus a little series of articles I've written about my experiences with programming, lifting, gaming, or anything else of interest.
             </p>
             <p>
                 As you can see, I'm a fan of the <em>"plain HTML is responsive"</em> school of thought. This website is intentionally very simple in its structure, styling, and interactivity. This is because I believe that the vast majority of the internet's most popular websites sacrifice usability and accessibility to make a flashier product. By using a simpler design, we can help to make the internet more accessible to all, regardless of their physical ability or device's processing power.

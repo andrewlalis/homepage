@@ -46,7 +46,6 @@ code {
     background-color: var(--background-color-2);
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid blue;
 }
 
 .stats-table th {
@@ -78,4 +77,23 @@ code {
 
 .page-header-selected {
     text-decoration: underline !important;
+}
+
+.basic-table {
+    background-color: var(--background-color-2);
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.basic-table th {
+    text-align: center;
+    border: 1px solid var(--background-color-3);
+    padding: 0.5em;
+}
+
+.basic-table td {
+    font-family: "IBM Plex Sans";
+    text-align: start;
+    border: 1px solid var(--background-color-3);
+    padding: 0.25em;
 }

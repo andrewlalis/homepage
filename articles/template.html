@@ -4,50 +4,16 @@
 	<meta charset="UTF-8">
 	<title>{{TEMPLATE_TITLE}}</title>
 	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="{{TEMPLATE_DESCRIPTION}}"/>
+
 	<link rel="stylesheet" href="../styles/font.css" type="text/css">
-
-	<!-- CSS class to hide elements if JS is not enabled. -->
-	<noscript><style>.jsonly{display: none !important;}</style></noscript>
-
-	<script>
-		// An inline script that manages the site's color theme.
-		const THEMES = ["light", "dark"];
-
-		function getPreferredTheme() {
-			const storedTheme = localStorage.getItem("theme");
-			if (storedTheme !== null && THEMES.includes(storedTheme)) return storedTheme;
-			if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-				return "dark";
-			}
-			return "light";
-		}
-
-		function setPreferredTheme(theme) {
-			document.documentElement.className = theme;
-			localStorage.setItem("theme", theme);
-		}
-
-		setPreferredTheme(getPreferredTheme());
-		window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
-			const newTheme = event.matches ? "dark" : "light";
-			setPreferredTheme(newTheme);
-		});
-		document.addEventListener("DOMContentLoaded", event => {
-			const themeToggleButton = document.getElementById("themeToggleButton");
-			themeToggleButton.onclick = clickEvent => {
-				const currentTheme = getPreferredTheme();
-				const idx = THEMES.indexOf(currentTheme);
-				const nextIdx = idx === THEMES.length - 1 ? 0 : idx + 1;
-				setPreferredTheme(THEMES[nextIdx]);
-			};
-		});
-	</script>
-
-	<link rel="stylesheet" href="../styles/style.css" type="text/css"/>
+    <script src="../scripts/themes.min.js"></script>
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    <link rel="stylesheet" href="../styles/style.css" type="text/css">
+	
 	<link rel="stylesheet" href="../styles/article.css" type="text/css"/>
 	<link rel="stylesheet" href="../vendor/prism.css" type="text/css"/>
-	<script src="../vendor/prism.js"></script>
 </head>
 <body>
 
@@ -118,7 +84,8 @@
 			</code></pre>
 		</figure>
 	</section>
+	<a href="../articles.html">Back to Articles</a>
 </article>
-
+<script src="../vendor/prism.js"></script>
 </body>
 </html>

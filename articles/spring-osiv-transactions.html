@@ -4,12 +4,37 @@
 	<meta charset="UTF-8">
 	<title>Spring's Open-Session-in-View &amp; Transactions</title>
 	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Some explanation about Spring Boot's open-session-in-view setting and how to get around it."/>
-	<link rel="stylesheet" href="../../css/style.css" type="text/css"/>
-	<link rel="stylesheet" href="../../css/prism.css" type="text/css"/>
-	<link rel="stylesheet" href="../../css/blog-article.css" type="text/css"/>
+	
+	<link rel="stylesheet" href="../styles/font.css" type="text/css">
+    <script src="../scripts/themes.min.js"></script>
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    <link rel="stylesheet" href="../styles/style.css" type="text/css">
+	
+	<link rel="stylesheet" href="../styles/article.css" type="text/css">
+	<link rel="stylesheet" href="../vendor/prism.css" type="text/css"/>
 </head>
 <body>
+<header class="page-header">
+	<h1>Andrew's Articles</h1>
+	<nav>
+		<div>
+			<a href="../index.html">Home</a>
+			<a class="page-header-selected" href="../articles.html">Articles</a>
+			<a href="../projects.html">Projects</a>
+			<a href="../training.html">Training</a>
+			<a href="../contact.html">Contact</a>
+		</div>
+		<div>
+			<a href="https://github.com/andrewlalis">GitHub</a>
+			<a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+			<a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+		</div>
+	</nav>
+	<button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+	<hr>
+</header>
 
 <article>
 	<header>
@@ -27,7 +52,7 @@
 		</p>
 	</section>
 	<section>
-		<h3>Don't Send Entities to Your View</h3>
+		<h2>Don't Send Entities to Your View</h2>
 		<p>
 			At first, many of the simple tutorials you'll read online will have you passing your entity models to Thymeleaf or JSP templates to render a web page for your application. This convenience is what leads developers to use OSIV in the first place, because they start fetching attributes of their entity which were not initially loaded. This is fine for the most simple "Hello World" starter projects, but as soon as you add any real complexity, this "convenience" breaks down into an unorganized mess, where it is not clear at a glance where data will be fetched from the database.
 		</p>
@@ -49,7 +74,7 @@
 		</p>
 	</section>
 	<section>
-		<h3>Transactions</h3>
+		<h2>Transactions</h2>
 		<p>
 			The Spring framework allows you to annotate a service's method as <code>@Transactional</code>, which means that at runtime, when your method is called, a proxy method is wrapped around it which starts a transaction (and thus a Hibernate session to go with it) that persists for the duration of the method. Inside this method, you are free to fetch lazy-loaded attributes from an entity, without having to deal with LazyInitializationExceptions.
 		</p>
@@ -73,9 +98,8 @@
 			However, the flexibility of being able to use lazy-loaded attributes the easy way more than makes up for the strict encapsulation rules, and by structuring your project around service methods as black-box operations, you'll be able to build huge projects while keeping your sanity mostly intact.
 		</p>
 	</section>
-	<a href="../blog.html">Back to Dev Discussions</a>
+	<a href="../articles.html">Back to Articles</a>
 </article>
-<script src="../../js/prism.js"></script>
-<script src="../../js/themes.js"></script>
+<script src="../vendor/prism.js"></script>
 </body>
 </html>
