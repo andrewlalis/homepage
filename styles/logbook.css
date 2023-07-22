@@ -1,0 +1,13 @@
+#messages-container {
+    margin-top: 1em;
+}
+
+.logbook-message {
+    background-color: var(--background-color-2);
+    margin: 0.5em 0;
+    padding: 0.5em;
+}
+
+.logbook-message time {
+    display: block;
+}

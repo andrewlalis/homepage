@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Andrew's Logbook</title>
+    <meta charset="utf-8">
+    <meta name="description" content="The logbook for andrewlalis.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="styles/font.css" type="text/css">
+    <script src="scripts/themes.min.js"></script>
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    <link rel="stylesheet" href="styles/style.css" type="text/css">
+
+    <link rel="stylesheet" href="styles/logbook.css" type="text/css">
+</head>
+
+<body>
+    <header class="page-header">
+        <h1>Andrew's Logbook</h1>
+        <nav>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="articles.html">Articles</a>
+                <a href="projects.html">Projects</a>
+                <a href="training.html">Training</a>
+                <a href="contact.html">Contact</a>
+                <a class="page-header-selected" href="logbook.html">Logbook</a>
+            </div>
+            <div>
+                <a href="https://github.com/andrewlalis">GitHub</a>
+                <a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+                <a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+            </div>
+        </nav>
+        <button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+        <hr>
+    </header>
+    <main>
+        <article>
+            <h2>Logbook</h2>
+            <p>
+                If you'd like, you can leave a message in my logbook so that I and others might see it.
+            </p>
+            <p style="font-size: smaller;">
+                <em>Note that I do check all logs and some basic information about who sent them (IP address, browser, etc). Inappropriate comments will be removed and their authors banned.</em>
+            </p>
+            <form id="logbook-form">
+                <div>
+                    <label>
+                        Name
+                        <input
+                            id="logbook-name-input"
+                            type="text"
+                            name="name"
+                            minlength="2"
+                            maxlength="32"
+                            pattern="[a-zA-Z0-9-_ ]+"
+                            required
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Message
+                        <textarea
+                            id="logbook-message-input"
+                            name="message"
+                            style="width: 100%; min-height: 10ch;"
+                            minlength="2"
+                            maxlength="255"
+                            required
+                        ></textarea>
+                    </label>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+            <p id="logbook-form-message-box" style="display: none;"></p>
+        </article>
+
+        <div id="messages-container"></div>
+    </main>
+    <script src="scripts/logbook.js"></script>
+</body>
+
+</html>
+
