@@ -1,6 +1,10 @@
-article {
-    background-color: var(--background-color-2);
-    padding: 0.5em 1em;
+/* Adjust body and hr to make the page slightly wider if possible. */
+body {
+    max-width: 70ch;
+}
+
+hr {
+    max-width: 80ch;
 }
 
 article h1 {
@@ -13,5 +17,5 @@ figure {
 }
 
 code {
-    font-size: x-small;
+    color: var(--code-color);
 }
