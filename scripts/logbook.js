@@ -1,4 +1,4 @@
-const LOGBOOK_URL = "http://localhost:8080";
+const LOGBOOK_URL = "https://logbook.andrewlalis.com";
 
 const messagesContainer = document.getElementById("messages-container");
 const form = document.getElementById("logbook-form");
