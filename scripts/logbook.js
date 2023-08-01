@@ -48,6 +48,14 @@ async function fetchMessages() {
     }
 }
 
+const parseDate = dateString => {
+    const b = dateString.split(/\D+/);
+    const offsetMult = dateString.indexOf('+') !== -1 ? -1 : 1;
+    const hrOffset = offsetMult * (+b[7] || 0);
+    const minOffset = offsetMult * (+b[8] || 0);  
+    return new Date(Date.UTC(+b[0], +b[1] - 1, +b[2], +b[3] + hrOffset, +b[4] + minOffset, +b[5], +b[6] || 0));
+  };
+
 function renderMessages(messages) {
     messagesContainer.innerHTML = "";
     messages.forEach(message => {
@@ -55,7 +63,7 @@ function renderMessages(messages) {
         messageElement.className = "logbook-message";
         
         const timestampElement = document.createElement("time");
-        const date = Date(message.createdAt);
+        const date = parseDate(message.createdAt);
         timestampElement.dateTime = message.createdAt;
         timestampElement.innerText = date.toLocaleString();
 
