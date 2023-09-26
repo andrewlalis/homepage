@@ -1,62 +1,38 @@
-body {
-    max-width: 100%;
-}
-
-/* This is the container for all cards. */
-main {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: stretch;
-    align-content: flex-start;
-    gap: 2em 2em;
-}
-
-article {
+.project-card {
     background-color: var(--background-color-2);
     padding: 0.5em;
-    width: calc((100% / 3) - 2.4em);
-    display: flex;
-    flex-direction: column;
+    display: inline-block;
 }
 
-@media(max-width: 1000px) {
-    article {
-        width: calc((100% / 2) - 2.4em);
-    }
+.project-card + .project-card {
+    margin-top: 1em;
 }
 
-@media(max-width: 480px) {
-    article {
-        width: 100%;
-    }
+.project-card > h2 {
+    margin: 0 0 0.25em 0;
 }
 
-article:nth-child(odd) {
-    background-color: var(--background-color-3);
+.project-card > h2:hover {
+    text-decoration: underline;
 }
 
-article h2 {
-    margin-top: 0;
-    margin-bottom: 0.5em;
-}
-
-article p {
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
+.project-card > p {
+    margin: 0.5em 0;
 }
 
 .icons-row {
     width: 100%;
-    margin-top: auto;
-    padding-top: 0.5em;
+    margin-top: 0.5em;
 }
 
 .lang-icon {
-    max-height: 2.5em;
+    max-height: 2em;
 }
 
 .lang-icon:not(:last-child) {
     margin-right: 0.5em;
+}
+
+pre {
+    padding: 0.25em !important;
 }

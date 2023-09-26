@@ -19,3 +19,7 @@ figure {
 code {
     color: var(--code-color);
 }
+
+pre {
+    padding: 0.25em !important;
+}
