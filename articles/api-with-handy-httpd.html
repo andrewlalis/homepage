@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Creating an API with Handy-Httpd</title>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="{{TEMPLATE_DESCRIPTION}}"/>
+
+	<link rel="stylesheet" href="../styles/font.css" type="text/css">
+    <script src="../scripts/themes.min.js"></script>
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    <link rel="stylesheet" href="../styles/style.css" type="text/css">
+	
+	<link rel="stylesheet" href="../styles/article.css" type="text/css"/>
+	<link rel="stylesheet" href="../vendor/prism.css" type="text/css"/>
+</head>
+<body>
+
+<header class="page-header">
+	<h1>Andrew's Articles</h1>
+	<nav>
+		<div>
+			<a href="../index.html">Home</a>
+			<a class="page-header-selected" href="../articles.html">Articles</a>
+			<a href="../projects.html">Projects</a>
+			<a href="../training.html">Training</a>
+			<a href="../contact.html">Contact</a>
+			<a href="../logbook.html">Logbook</a>
+		</div>
+		<div>
+			<a href="https://github.com/andrewlalis">GitHub</a>
+			<a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+			<a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+		</div>
+	</nav>
+	<button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+	<hr>
+</header>
+
+<article>
+	<header>
+		<h1>Creating an API with Handy-Httpd</h1>
+		<p>
+			<em>Written on <time datetime="2023-09-26">September 26<sup>th</sup>, 2023</time>, by Andrew Lalis.</em>
+		</p>
+	</header>
+	<section>
+		<h2>Introduction</h2>
+		<p>
+			When I started programming in the D language, I was coming fresh from the world of Java and Spring, where setting up a new web API for a project was pretty much as simple as creating a new method annotated with <code>@GetMapping</code>. In the D world, the closest thing to an all-encompassing web framework is <a href="https://vibed.org/" target="_blank">Vibe.d</a>, which is quite convoluted (from a beginner's perspective), and is heavily focused on its own ecosystem and async implementations. That gives it a sort of "walled-garden" feel. There were other, smaller HTTP web server libraries, but none were well documented. So in the end, I set out to build my own HTTP server, which then evolved into more of an HTTP web framework. That's <a href="https://github.com/andrewlalis/handy-httpd">Handy-Httpd</a>.
+		</p>
+		<p>
+			Handy-Httpd was built on the concept of an <code>HttpRequestHandler</code>, a single unit that takes an HTTP request and does stuff with it.
+		</p>
+		<figure>
+			<pre><code class="language-d">
+				class ExampleHandler : HttpRequestHandler {
+					void handle(ref HttpRequestContext ctx) {
+						ctx.response.writeBodyString("Hello world!");
+					}
+				}
+			</code></pre>
+			<figcaption>Here's an example of an <code>HttpRequestHandler</code> that just responds with <em>"Hello world!"</em> to any request.</figcaption>
+		</figure>
+		<p>
+			With this request handler, and the <a href="https://en.wikipedia.org/wiki/Object_composition">principle of composition</a>, we can build up a complete web framework from a few well-purposed handlers.
+		</p>
+	</section>
+
+	<section>
+		<h2>Setting Up</h2>
+		<p>
+			As with any web server, there's some startup and configuration that needs to be done to get everything working, so we'll get that out of the way first.
+		</p>
+		<p>
+			We need to create a new D project, and add <code>handy-httpd</code> as a dependency. Do so with the <code>dub</code> CLI tool, or however you prefer to create D projects. Then we'll set up the basic HTTP server in our project's main file.
+		</p>
+		<figure>
+			<pre><code class="language-d line-numbers">
+				import handy_httpd;
+				import handy_httpd.handlers.path_delegating_handler;
+
+				void main() {
+					ServerConfig config = ServerConfig.defaultValues();
+					config.workerPoolSize = 3;
+					PathDelegatingHandler pathHandler = new PathDelegatingHandler();
+					// TODO: Add mappings to pathHandler
+					HttpServer server = new HttpServer(pathHandler, config);
+					server.start();
+				}
+			</code></pre>
+		</figure>
+		<p>The typical boilerplate consists of three main things:</p>
+		<ol>
+			<li>Configuration</li>
+			<li>Building our request handler</li>
+			<li>Starting the server</li>
+		</ol>
+		<p>
+			For illustrations' sake, I've configured this server to use 3 workers in its pool for handling requests. You might need more depending on your traffic. I've also created a new <code>PathDelegatingHandler</code> which will serve as the basis for the API's set of endpoints. Check out the <a href="https://andrewlalis.github.io/handy-httpd/guide/handlers/path-delegating-handler.html">documentation on this handler</a> for a detailed explanation of what it can do; in short, we can register new API endpoints to it.
+		</p>
+	</section>
+	<section>
+		<h2>Adding an Endpoint</h2>
+		<p>
+			Now that our server is set up, all we need to do is define some endpoints for users to interact with. This is as simple as creating an <code>HttpRequestHandler</code> and registering it with our <code>pathHandler</code> that we defined on line 7.
+		</p>
+		<p>
+			To keep things simple to start, we'll add a <em>status</em> endpoint that just returns the string <em>"online"</em>. For something this basic, there's no need to create a whole new class; instead, we'll just define a function.
+		</p>
+		<figure>
+			<pre><code class="language-d">
+				void handleStatus(ref HttpRequestContext ctx) {
+					ctx.response.writeBodyString("online");
+				}
+			</code></pre>
+		</figure>
+		<p>
+			And then, we'll register it with our path handler so that GET requests to <code>/status</code> will be directed to the <code>handleStatus</code> function.
+		</p>
+		<figure>
+			<pre><code class="language-d">
+				pathHandler.addMapping(Method.GET, "/status", &handleStatus);
+			</code></pre>
+		</figure>
+		<p>
+			Done! We can now run our project and navigate to <a href="http://localhost:8080/status">localhost:8080/status</a>, and we should see the text <em>"online"</em>. It's that simple.
+		</p>
+	</section>
+	<section>
+		<h2>Posting Data to Our API</h2>
+		<p>
+			A GET endpoint is easy enough, but making an endpoint that accepts the user's data isn't too hard either.
+		</p>
+		<figure>
+			<pre><code class="language-d">
+				void receivePost(ref HttpRequestContext ctx) {
+					JSONValue content = ctx.request.readBodyAsJson();
+					// Do stuff with the content.
+				}
+			</code></pre>
+		</figure>
+	</section>
+
+	<a href="../articles.html">Back to Articles</a>
+</article>
+<script src="../vendor/prism.js"></script>
+</body>
+</html>
