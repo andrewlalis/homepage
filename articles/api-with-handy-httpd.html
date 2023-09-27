@@ -141,6 +141,71 @@
 				}
 			</code></pre>
 		</figure>
+		<p>
+			You're not limited to only JSON though; users can upload URL-encoded data, or XML, or literally anything else. It's just that D's standard library provides a JSON implementation, so Handy-Httpd gives you some help with it.
+		</p>
+		<p>
+			Under the hood, Handy-Httpd uses the <a href="https://github.com/andrewlalis/streams">streams</a> library for the underlying data transfer, so if you're looking for a completely custom solution, you'll need to read from <code>ctx.request.inputStream</code>, which is a <code>InputStream!ubyte</code>. Also note that each request has a pre-allocated <code>receiveBuffer</code> that you can use instead of creating your own separate buffer.
+		</p>
+	</section>
+	<section>
+		<h2>Adding Middleware with Filters</h2>
+		<p>
+			One of the buzz words these days in web programming is <em>"middleware"</em>, which is just a fancy term for anything that sits between two systems and performs some limited set of functions on the data that is passed between the systems.
+		</p>
+		<p>
+			In Handy-Httpd, we've provided a convenient method of adding middleware to the HTTP request handling flow with the <code>HttpRequestFilter</code>, <code>FilterChain</code>, and the <code>FilteredRequestHandler</code>.
+		</p>
+		<figure>
+			<img src="images/handy-httpd-filter-diagram.webp" style="max-width: 512px;">
+			<figcaption>An illustration of how an HTTP request is processed by a FilteredRequestHandler: first it goes through all pre-request filters, then the underlying handler, and finally any post-request filters.</figcaption>
+		</figure>
+		<p>
+			Suppose we want to authenticate requests to certain endpoints. That's a pretty straightforward task that many web frameworks deal with. In Handy-Httpd, you'd create a filter that reads a JWT token from the request's header, decodes it, and adds user info to the request context's <code>metadata</code> property.
+		</p>
+		<figure>
+			<pre><code class="language-d">
+				class TokenFilter : HttpRequestFilter {
+					void apply(ref HttpRequestContext ctx, FilterChain filterChain) {
+						Nullable!UserInfo userInfo = tryParseToken(ctx.request.getHeader("Authorization"));
+						if (userInfo.isNull) {
+							ctx.response.setStatus(HttpStatus.UNAUTHORIZED);
+							ctx.response.writeBodyString("Invalid or missing token.");
+							return; // Exit without continuing the filter chain.
+						}
+						ctx.metadata["userInfo"] = userInfo.get();
+						filterChain.doFilter(ctx);
+					}
+
+					private Nullable!UserInfo tryParseToken(string authHeader) {
+						// Actual implementation omitted for brevity.
+					}
+				}
+			</code></pre>
+		</figure>
+		<p>
+			Then to actually use your newly-created <code>TokenFilter</code> to safeguard your endpoint, you'd use the <code>FilteredRequestHandler</code> to wrap your endpoint and set the TokenFilter as one of the pre-request filters.
+		</p>
+		<figure>
+			<pre><code class="language-d">
+				FilteredRequestHandler frh = new FilteredRequestHandler(
+					mySuperSecretEndpoint,
+					[new TokenFilter()]
+				);
+			</code></pre>
+		</figure>
+		<p>
+			That's all there is to it! No runtime magic, just composing a handler that does exactly what you tell it to.
+		</p>
+	</section>
+	<section>
+		<h2>Additional Remarks</h2>
+		<p>
+			While I've done my best (which admittedly isn't that good) to keep Handy-Httpd lightweight and performant, that really isn't the number 1 goal. My goal was always to build a simple HTTP server with some nice-to-have conveniences that don't require months of diligent study to use effectively. I wanted something with sufficient documentation so that Handy-Httpd can be a D programmer's first introduction to HTTP servers.
+		</p>
+		<p>
+			We're now on version <em>7.10.4</em> as of writing this article, and I feel like Handy-Httpd is in a place where I can comfortably say that it's reached those goals. Thanks for reading all the way through, and if you do try out Handy-Httpd, please do let me know what you think!
+		</p>
 	</section>
 
 	<a href="../articles.html">Back to Articles</a>
