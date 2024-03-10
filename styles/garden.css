@@ -1,0 +1,37 @@
+.plant-card {
+    background-color: var(--background-color-2);
+    padding: 0.5em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1%;
+}
+
+.plant-card + .plant-card {
+    margin-top: 1em;
+}
+
+.plant-card > section {
+    flex-grow: 1;
+    max-width: 49.5%;
+}
+
+.plant-card > section > h2 {
+    margin: 0;
+}
+
+.plant-card > section > .sci {
+    margin: 0;
+    font-style: italic;
+    font-family: serif;
+    font-size: smaller;
+}
+
+.plant-card > section > p {
+    margin: 0.5em 0;
+}
+
+.plant-card > img {
+    max-width: 49.5%;
+    object-fit: scale-down;
+    flex-grow: 0;
+}

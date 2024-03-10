@@ -7,7 +7,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="A short guide for using handy-httpd to create an API."/>
 
-	<link rel="stylesheet" href="../styles/font.css" type="text/css">
     <script src="../scripts/themes.min.js"></script>
     <noscript><style>.jsonly{display: none !important;}</style></noscript>
     <link rel="stylesheet" href="../styles/style.css" type="text/css">
@@ -26,6 +25,7 @@
 			<a class="page-header-selected" href="../articles.html">Articles</a>
 			<a href="../projects.html">Projects</a>
 			<a href="../training.html">Training</a>
+			<a href="../garden.html">Garden</a>
 			<a href="../contact.html">Contact</a>
 			<a href="../logbook.html">Logbook</a>
 		</div>
@@ -158,7 +158,9 @@
 			In Handy-Httpd, we've provided a convenient method of adding middleware to the HTTP request handling flow with the <code>HttpRequestFilter</code>, <code>FilterChain</code>, and the <code>FilteredRequestHandler</code>.
 		</p>
 		<figure>
-			<img src="images/handy-httpd-filter-diagram.webp" style="max-width: 512px;" alt="Handy-Httpd request filter diagram">
+			<div class="img-center">
+				<img src="images/handy-httpd-filter-diagram.webp" alt="Handy-Httpd request filter diagram">
+			</div>
 			<figcaption>An illustration of how an HTTP request is processed by a FilteredRequestHandler: first it goes through all pre-request filters, then the underlying handler, and finally any post-request filters.</figcaption>
 		</figure>
 		<p>
