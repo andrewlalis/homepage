@@ -7,6 +7,6 @@
 # These are denoted with an "--exclude" parameter.
 
 rsync -rav -e ssh --delete \
---exclude .git/ --exclude *.sh --exclude README.md --exclude *.d --exclude *.ods --exclude garden-data-gen/* \
+--exclude .git/ --exclude *.sh --exclude README.md --exclude *.d --exclude *.ods --exclude garden-data-gen/ \
 ./ \
 root@andrewlalis.com:/var/www/andrewlalis.com/html
