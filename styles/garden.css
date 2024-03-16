@@ -1,4 +1,4 @@
-.plant-card {
+.species-card {
     background-color: var(--background-color-2);
     padding: 0.5em;
     display: flex;
@@ -6,32 +6,57 @@
     gap: 1%;
 }
 
-.plant-card + .plant-card {
+.species-card + .species-card {
     margin-top: 1em;
 }
 
-.plant-card > section {
+.species-card > section {
     flex-grow: 1;
     max-width: 49.5%;
 }
 
-.plant-card > section > h2 {
+.species-card > section > h2 {
     margin: 0;
 }
 
-.plant-card > section > .sci {
+.species-card > section > .sci {
     margin: 0;
     font-style: italic;
     font-family: serif;
     font-size: smaller;
 }
 
-.plant-card > section > p {
+.species-card > section > p {
     margin: 0.5em 0;
 }
 
-.plant-card > img {
+.species-card > img {
     max-width: 49.5%;
     object-fit: scale-down;
     flex-grow: 0;
+}
+
+
+
+.plant-card {
+    background-color: var(--background-color-2);
+    padding: 0.5em;
+}
+
+.plant-card + .plant-card {
+    margin-top: 1em;
+}
+
+.plant-card > section > h2 {
+    margin: 0;
+}
+
+.plant-card > section > .gen {
+    margin: 0;
+    font-family: monospace;
+    font-size: medium;
+}
+
+.plant-card > section > p {
+    margin: 0.5em 0;
 }

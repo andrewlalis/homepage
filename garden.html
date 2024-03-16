@@ -12,6 +12,18 @@
     <link rel="stylesheet" href="styles/style.css" type="text/css">
     <link rel="stylesheet" href="styles/garden.css" type="text/css">
     <script src="scripts/sitestat.js?remote-url=sitestat.andrewlalis.com" async></script>
+
+    <script type="module">
+        import PhotoSwipeLightbox from "./vendor/photoswipe/photoswipe-lightbox.esm.min.js";
+        import PhotoSwipe from "./vendor/photoswipe/photoswipe.esm.min.js";
+        const lightbox = new PhotoSwipeLightbox({
+            gallery: "#main-garden-gallery",
+            children: "a",
+            pswpModule: PhotoSwipe
+        });
+        lightbox.init();
+    </script>
+    <link rel="stylesheet" href="vendor/photoswipe/photoswipe.css" type="text/css">
 </head>
 
 <body>
@@ -43,7 +55,16 @@
             <p>
                 My garden is just a small patch of land outside the condo my wife and I call home. It's located in <a href="https://planthardiness.ars.usda.gov/">USDA hardiness zone 10a</a> (actually, right on the border of 9b and 10a) in Florida, USA, and I've been trying to beautify the space with a mixture of native and non-invasive ornamental shrubs, herbs, and other plants. While currently there are quite a few non-native species, I'm trying to slowly migrate to entirely native plants and non-invasive food crops, especially those that can help rebuild the soil quality; it's pretty much just sandy clay here.
             </p>
-            <img style="max-width: 100%" src="images/garden/garden-front_20240310_084331.jpg" alt="The main area of my garden"/>
+            <div id="main-garden-gallery" class="pswp-gallery">
+                <a href="images/garden/garden-front_20240310_084331.jpg"
+                    data-pswp-width="2540"
+                    data-pswp-height="1492"
+                    target="_blank"
+                >
+                    <img src="images/garden/garden-front_20240310_084331.jpg" style="max-width: 100%"/>
+                </a>
+            </div>
+            <!-- <img style="max-width: 100%" src="images/garden/garden-front_20240310_084331.jpg" alt="The main area of my garden"/> -->
             <p>
                 If you'd like to leave feedback about the garden, or to request seeds, cuttings, please do contact me via the info on my <a href="contact.html">contact page</a>. I generally try to keep a supply of seeds for as many of my plants as possible, but as always, it depends.
             </p>
@@ -53,253 +74,360 @@
 
             <h3>Table of Contents</h3>
             <ol>
-                <li><a href="#plants">Plants</a></li>
+                <li><a href="#species">Species</a></li>
                 <li><a href="#hardscaping">Hardscaping</a></li>
             </ol>
             <hr/>
         </article>
 
         <article>
-            <h2 id="plants">Plants</h2>
+            <h2 id="species">Species</h2>
             <p>
-                Here's a detailed list of all the plants I've got in my garden. For each plant, I try to include its scientific name, place of origin, and a small description, usually taken from Wikipedia or other sources listed at the bottom of each plant's info.
+                Here's a detailed list of all the species I've got in my garden. For each species, I try to include its scientific name, place of origin, and a small description, usually taken from Wikipedia or other sources listed at the bottom of each species' info.
             </p>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Bird Pepper</h2>
-                    <p class="sci">Capsicum annuum var. glabriusculum</p>
-                    <p>A small chili pepper variety native to southern North America and northern South America. It's the only pepper species native to the Floridian peninsula.</p>
-                    <p>Transplanted from a 1 gallon pot, on February 10th, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Capsicum_annuum_var._glabriusculum">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/bird-pepper_20240310_113310.jpg" alt="Bird Pepper plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Blue Pacific Juniper</h2>
-                    <p class="sci">Juniperus conferta</p>
-                    <p>A species of Juniper native to Japan, that grows on sand dunes and other acidic/alkaline soils with good drainage. It forms a groundcover if left unattended.</p>
-                    <p>Transplanted on the 2nd of March, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Juniperus_conferta">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/blue-juniper_20240310_113334.jpg" alt="Blue Pacific Juniper plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Browne's Savory</h2>
-                    <p class="sci">Clinopodium brownei</p>
-                    <p>A sprawling perennial herb found natively in the coastal plains and marshes of the southeastern United States.</p>
-                    <p>Transplanted on the 10th of February, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Clinopodium_brownei">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/browns-savory_20240310_113313.jpg" alt="Browne's Savory plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Catnip</h2>
-                    <p class="sci">Nepeta cataria</p>
-                    <p>Species of mint that about 2/3rds of cats are attracted to.</p>
-                    <p>Native to southern and eastern Europe, the Middle East, Central Asia, and parts of China.</p>
-                    <p>Transplanted from a small pot bought at a pet store, sometime in October, 2023.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Catnip">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/catnip_20240310_113153.jpg" alt="Catnip plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Garlic Chives</h2>
-                    <p class="sci">Allium tuberosum</p>
-                    <p>A clump-forming perennial herb native to the Chinese province of Shanxi, but now found pretty much worldwide.</p>
-                    <p>Planted from seed on the 2nd of March, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Allium_tuberosum">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/chives_20240310_113216.jpg" alt="Chives plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Cilantro</h2>
-                    <p class="sci">Coriandrum sativum</p>
-                    <p>Also known as Coriander, this is an annual herb that most people enjoy has having a tart, lemon/lime taste. It's native to the mediterranean basin, but is grown worldwide.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Coriander">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/cilantro_20240310_113220.jpg" alt="Cilantro plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Creeping Sage</h2>
-                    <p class="sci">Salvia misella</p>
-                    <p>Also known as tropical sage, it is an annual herb growing throughout the tropical Americas.</p>
-                    <p>Transplanted on the 9th of March, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Salvia_misella">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/creeping-sage_20240310_113303.jpg" alt="Creeping Sage plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Dwarf Shiny-Leaf Coffee</h2>
-                    <p class="sci">Psychotria nervosa</p>
-                    <p>A small shrub with shiny evergreen leaves that produces beans similar to coffee, but without any caffeine. Native to the southeastern United States.</p>
-                    <p>Transplanted on the 10th of February, 2024.</p>
-                    <footer>
-                        <a href="https://gardeningsolutions.ifas.ufl.edu/plants/trees-and-shrubs/shrubs/wild-coffee.html">University of Florida</a>
-                    </footer>
-                </section>
-                <img src="images/garden/dwarf-coffee_20240310_113259.jpg" alt="Dwarf Coffee plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Kimberley Queen Fern</h2>
-                    <p class="sci">Nephrolepis obliterata</p>
-                    <p>A species of fern originating from Australia, but grown worldwide.</p>
-                    <p>Transplanted on the 2nd of March, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Nephrolepis_obliterata">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/fern_20240310_113359.jpg" alt="Fern plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Foxtail Fern</h2>
-                    <p class="sci">Asparagus aethiopicus</p>
-                    <p>A plant native to South Africa that's grown ornamentally in many places. Its roots form water-storage tubers.</p>
-                    <p>Transplanted in February, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Asparagus_aethiopicus">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/foxtail-fern_20240310_113229.jpg" alt="Foxtail Fern plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Inchplant</h2>
-                    <p class="sci">Tradescantia zebrina</p>
-                    <p>A species of creeping vine plant that forms a dense groundcover in shaded areas. It's native to Mexico, Central America, and Colombia.</p>
-                    <p>Transplanted on the 8th of March, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Tradescantia_zebrina">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/inchplant_20240310_113409.jpg" alt="Inchplant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Jalapeño</h2>
-                    <p class="sci">Capsicum annuum var. jalapeño</p>
-                    <p>A medium-sized chili pepper species with relatively mild pungency. It's commonly picked and consumed while still green, and were originally cultivated by the Aztecs.</p>
-                    <p>Transplanted on the 2nd of March, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Jalape%C3%B1o">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/jalapeno_20240310_113329.jpg" alt="Jalapeño plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Marigold</h2>
-                    <p class="sci">Tagetes erecta</p>
-                    <p>A species of flowering plant native to the Americas that is widely used as an ornamental flower, and was originally called by its Nahuatl name, cempoalxóchitl.</p>
-                    <p>Planted from seed in February, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Tagetes_erecta">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/marigold_20240310_113234.jpg" alt="Marigold plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Perennial Petunia</h2>
-                    <p class="sci">Ruellia caroliniensis</p>
-                    <p>A wild petunia with blue or violet flowers that's native to the southeastern United States.</p>
-                    <p>Transplanted on the 10th of February, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Ruellia_caroliniensis">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/perennial-petunia_20240310_113346.jpg" alt="Petunia plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Mona Lavender</h2>
-                    <p class="sci">Plectranthus "Mona Lavender"</p>
-                    <p>A hybrid of <em>Plectranthus saccatus</em> and <em>Plectranthus hilliardiae</em>, this is a broadleaf evergreen shrub in the mint family, which produces many small purple flowers.</p>
-                    <p>Transplanted in February, 2024.</p>
-                    <footer>
-                        <a href="https://plants.ces.ncsu.edu/plants/plectranthus-mona-lavender/">North Carolina State University</a>
-                    </footer>
-                </section>
-                <img src="images/garden/plectranthus_20240310_113255.jpg" alt="Plectranthus plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>English Thyme</h2>
-                    <p class="sci">Thymus vulgaris</p>
-                    <p>A flowering plant in the mint family, native to southern Europe, that's commonly used as an herb.</p>
-                    <p>Planted from seed in March, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Thymus_vulgaris">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/thyme_20240310_113210.jpg" alt="Thyme plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Tropical Milkweed</h2>
-                    <p class="sci">Asclepias curassavica</p>
-                    <p>A flowering milkweed species native to the American tropics which is a food source for Monarch butterflies.</p>
-                    <p>Note: Research suggests that this plant may disrupt migratory patterns in butterflies when planted in northern United States habitats. I'm working on replacing it with native milkweed variants.</p>
-                    <p>Transplanted in February, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Asclepias_curassavica">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/tropical-milkweed_20240310_113353.jpg" alt="Tropical Milkweed plant"/>
-            </div>
-
-            <div class="plant-card">
-                <section>
-                    <h2>Wood Sage</h2>
-                    <p class="sci">Teucrium canadense</p>
-                    <p>A perennial herb native to North America, growing in moist grasslands, forest edges, marshes, and on roadsides.</p>
-                    <p>Transplanted on the 9th of March, 2024.</p>
-                    <footer>
-                        <a href="https://en.wikipedia.org/wiki/Teucrium_canadense">Wikipedia</a>
-                    </footer>
-                </section>
-                <img src="images/garden/woody-sage_20240310_113339.jpg" alt="Wood Sage plant"/>
-            </div>
-
+            <!--__SPECIES_LIST_START__-->
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/capsicum-annuum-var-glabriusculum.html">
+                Bird Pepper
+            </a>
+        </h2>
+        <p class="sci">
+            Capsicum annuum var. glabriusculum
+        </p>
+        <p>A small chili pepper variety native to southern North America and northern South America. It's the only pepper species native to the Floridian peninsula.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Capsicum_annuum_var._glabriusculum">
+                https://en.wikipedia.org/wiki/Capsicum_annuum_var._glabriusculum
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/capsicum-annuum-var-glabriusculum/Capsicum_annuum-FWF.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/juniperus-conferta.html">
+                Blue Pacific Juniper
+            </a>
+        </h2>
+        <p class="sci">
+            Juniperus conferta
+        </p>
+        <p>A species of Juniper native to Japan, that grows on sand dunes and other acidic/alkaline soils with good drainage. It forms a groundcover if left unattended.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Juniperus_conferta">
+                https://en.wikipedia.org/wiki/Juniperus_conferta
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/juniperus-conferta/Juniperus_conferta_blue_pacific--Javier-Alejandro--CC-BY-NC-ND.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/clinopodium-brownei.html">
+                Browne’s Savory
+            </a>
+        </h2>
+        <p class="sci">
+            Clinopodium brownei
+        </p>
+        <p>A sprawling perennial herb found natively in the coastal plains and marshes of the southeastern United States.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Clinopodium_brownei">
+                https://en.wikipedia.org/wiki/Clinopodium_brownei
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/clinopodium-brownei/clinopodium_brownei-keim2-1-e1602619542587.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/nepeta-cataria.html">
+                Catnip
+            </a>
+        </h2>
+        <p class="sci">
+            Nepeta cataria
+        </p>
+        <p>Species of mint that about 2/3rds of cats are attracted to. Native to southern and eastern Europe, the Middle East, Central Asia, and parts of China.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Catnip">
+                https://en.wikipedia.org/wiki/Catnip
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/nepeta-cataria/catnip-test.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/coriandrum-sativum.html">
+                Cilantro
+            </a>
+        </h2>
+        <p class="sci">
+            Coriandrum sativum
+        </p>
+        <p>Also known as Coriander, this is an annual herb that most people enjoy has having a tart, lemon/lime taste. It's native to the Mediterranean basin, but is grown worldwide.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Coriander">
+                https://en.wikipedia.org/wiki/Coriander
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/coriandrum-sativum/Coriandrum_sativum--Forest-and-Kim-Starr--CC-BY.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/salvia-misella.html">
+                Creeping Sage
+            </a>
+        </h2>
+        <p class="sci">
+            Salvia misella
+        </p>
+        <p>Also known as tropical sage, it is an annual herb growing throughout the tropical Americas.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Salvia_misella">
+                https://en.wikipedia.org/wiki/Salvia_misella
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/salvia-misella/salvia-misella.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/psychotria-nervosa.html">
+                Dwarf Shiny-Leaf Coffee
+            </a>
+        </h2>
+        <p class="sci">
+            Psychotria nervosa
+        </p>
+        <p>A small shrub with shiny evergreen leaves that produces beans similar to coffee, but without any caffeine. Native to the southeastern United States.</p>
+        <footer>
+            <a target="_blank" href="https://gardeningsolutions.ifas.ufl.edu/plants/trees-and-shrubs/shrubs/wild-coffee.html">
+                https://gardeningsolutions.ifas.ufl.edu/plants/trees-and-shrubs/shrubs/wild-coffee.html
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/psychotria-nervosa/Psychotria_nervosa-JennyEvans_CCBY-NC2.0.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/thymus-vulgaris.html">
+                English Thyme
+            </a>
+        </h2>
+        <p class="sci">
+            Thymus vulgaris
+        </p>
+        <p>A flowering plant in the mint family, native to southern Europe, that's commonly used as an herb.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Thymus_vulgaris">
+                https://en.wikipedia.org/wiki/Thymus_vulgaris
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/thymus-vulgaris/Thymus-vulgaris--CT-Arzneimittel-GmbH--CC-BY-ND.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/asparagus-aethiopicus.html">
+                Foxtail Fern
+            </a>
+        </h2>
+        <p class="sci">
+            Asparagus aethiopicus
+        </p>
+        <p>A plant native to South Africa that's grown ornamentally in many places. Its roots form water-storage tubers.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Asparagus_aethiopicus">
+                https://en.wikipedia.org/wiki/Asparagus_aethiopicus
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/asparagus-aethiopicus/foxtail_fern_asparagus_meyeri.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/allium-tuberosum.html">
+                Garlic Chives
+            </a>
+        </h2>
+        <p class="sci">
+            Allium tuberosum
+        </p>
+        <p>A clump-forming perennial herb native to the Chinese province of Shanxi, but now found pretty much worldwide.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Allium_tuberosum">
+                https://en.wikipedia.org/wiki/Allium_tuberosum
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/allium-tuberosum/Allium_tuberosum-ingarden1.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/trandescantia-zebrina.html">
+                Inchplant
+            </a>
+        </h2>
+        <p class="sci">
+            Trandescantia zebrina
+        </p>
+        <p>A species of creeping vine plant that forms a dense groundcover in shaded areas. It's native to Mexico, Central America, and Colombia.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Tradescantia_zebrina">
+                https://en.wikipedia.org/wiki/Tradescantia_zebrina
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/trandescantia-zebrina/Tradescantia-zebrina_AdobeStock_492957504_1200px.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/capsicum-annuum-var-jalapeno.html">
+                Jalapeño
+            </a>
+        </h2>
+        <p class="sci">
+            Capsicum annuum var. jalapeño
+        </p>
+        <p>A medium-sized chili pepper species with relatively mild pungency. It's commonly picked and consumed while still green, and were originally cultivated by the Aztecs.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Jalape%C3%B1o">
+                https://en.wikipedia.org/wiki/Jalape%C3%B1o
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/capsicum-annuum-var-jalapeno/jalapeno.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/nephrolepis-obliterata.html">
+                Kimberley Queen Fern
+            </a>
+        </h2>
+        <p class="sci">
+            Nephrolepis obliterata
+        </p>
+        <p>A species of fern originating from Australia, but grown worldwide.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Nephrolepis_obliterata">
+                https://en.wikipedia.org/wiki/Nephrolepis_obliterata
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/nephrolepis-obliterata/nephrolepis-obliterata.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/tagetes-erecta.html">
+                Marigold
+            </a>
+        </h2>
+        <p class="sci">
+            Tagetes erecta
+        </p>
+        <p>A species of flowering plant native to the Americas that is widely used as an ornamental flower, and was originally called by its Nahuatl name, cempoalxóchitl.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Tagetes_erecta">
+                https://en.wikipedia.org/wiki/Tagetes_erecta
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/tagetes-erecta/tagetes-erecta.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/plectranthus-mona-lavender.html">
+                Mona Lavender
+            </a>
+        </h2>
+        <p class="sci">
+            Plectranthus “Mona Lavender”
+        </p>
+        <p>A hybrid of Plectranthus saccatus and Plectranthus hilliardiae, this is a broadleaf evergreen shrub in the mint family, which produces many small purple flowers.</p>
+        <footer>
+            <a target="_blank" href="https://plants.ces.ncsu.edu/plants/plectranthus-mona-lavender/">
+                https://plants.ces.ncsu.edu/plants/plectranthus-mona-lavender/
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/plectranthus-mona-lavender/plectranthus-0773400934.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/ruellia-caroliniensis.html">
+                Perennial Petunia
+            </a>
+        </h2>
+        <p class="sci">
+            Ruellia caroliniensis
+        </p>
+        <p>A wild petunia with blue or violet flowers that's native to the southeastern United States.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Ruellia_caroliniensis">
+                https://en.wikipedia.org/wiki/Ruellia_caroliniensis
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/ruellia-caroliniensis/Ruellia-carolinensis-Carolina-Wild-Petunia-by-Marti-Webster-e1525962513541.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/asclepias-curassavica.html">
+                Tropical Milkweed
+            </a>
+        </h2>
+        <p class="sci">
+            Asclepias curassavica
+        </p>
+        <p>A flowering milkweed species native to the American tropics which is a food source for Monarch butterflies. Note: Research suggests that this plant may disrupt migratory patterns in butterflies when planted in northern United States habitats. I'm working on replacing it with native milkweed variants.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Asclepias_curassavica">
+                https://en.wikipedia.org/wiki/Asclepias_curassavica
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/asclepias-curassavica/Asclepias_curassavica-Thekkady-2016-12-03-001.jpg"/>
+</div>
+<div class="species-card">
+    <section>
+        <h2>
+            <a href="garden/species/teucrium-canadense.html">
+                Wood Sage
+            </a>
+        </h2>
+        <p class="sci">
+            Teucrium canadense
+        </p>
+        <p>A perennial herb native to North America, growing in moist grasslands, forest edges, marshes, and on roadsides.</p>
+        <footer>
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Teucrium_canadense">
+                https://en.wikipedia.org/wiki/Teucrium_canadense
+            </a>
+        </footer>
+    </section>
+    <img src="images/garden/species/teucrium-canadense/teucrium-canadense-perennials-20a__49095.jpg"/>
+</div><!--__SPECIES_LIST_END__-->
         </article>
 
         <article>

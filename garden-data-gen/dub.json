@@ -1,0 +1,13 @@
+{
+	"authors": [
+		"Andrew Lalis"
+	],
+	"copyright": "Copyright © 2024, Andrew Lalis",
+	"dependencies": {
+		"archive": "~>0.7.1",
+		"dxml": "~>0.4.4"
+	},
+	"description": "Small app for dynamically generating garden site HTML from data.",
+	"license": "proprietary",
+	"name": "garden-data-gen"
+}

@@ -1,0 +1,16 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/garden-data-gen
+garden-data-gen.so
+garden-data-gen.dylib
+garden-data-gen.dll
+garden-data-gen.a
+garden-data-gen.lib
+garden-data-gen-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst
