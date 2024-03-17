@@ -49,7 +49,7 @@ private void renderSpeciesCards(PlantData data) {
         if (imagePairs.length > 0) {
             string imageFile = imagePairs[0].filename;
             string thumbnailFile = imagePairs[0].thumbnailFilename;
-            string imgTag = "<img src=\"" ~ imageFile ~ "\"/>";
+            string imgTag = "<img src=\"" ~ (thumbnailFile is null ? imageFile : thumbnailFile) ~ "\"/>";
             card = replaceFirst(card, "!IMAGE!", imgTag);
         } else {
             card = replaceFirst(card, "!IMAGE!", "");
@@ -85,15 +85,7 @@ private void renderSpeciesPages(PlantData data) {
             ImageFilePair[] imagePairs = getPlantImages(plant.identifier);
             Appender!string imagesApp;
             foreach (imagePair; imagePairs) {
-                import std.format;
-                const imgTpl = "<a href=\"%s\" data-pswp-width=\"%d\" data-pswp-height=\"%d\" target=\"_blank\">\n" ~
-                                "    <img src=\"%s\" alt=\"\"/>\n" ~
-                                "</a>\n";
-                imagesApp ~= format!(imgTpl)(
-                    "../../" ~ imagePair.filename,
-                    imagePair.width, imagePair.height,
-                    "../../" ~ imagePair.thumbnailFilename,
-                );
+                imagesApp ~= generatePhotoSwipeElement(imagePair);
             }
             card = replaceFirst(card, "!IMAGES!", imagesApp[]);
             plantDivsApp ~= card;
@@ -111,6 +103,29 @@ private void renderSpeciesPages(PlantData data) {
         string pagePath = buildPath(speciesPagesDir, species.id ~ ".html");
         std.file.write(pagePath, page);
     }
+}
+
+private string generatePhotoSwipeElement(ImageFilePair imagePair) {
+    import std.format;
+    import std.datetime;
+    import std.typecons;
+    const linkFormat = "<a href=\"%s\" data-pswp-width=\"%d\" data-pswp-height=\"%d\" target=\"_blank\">";
+    const thumbnailFormat = "<img src=\"%s\" alt=\"\" style=\"display: block;\"/>";
+    const captionFormat = "<time datetime=\"%04d-%02d-%02d\">%s</time>";
+    string linkTag = format!(linkFormat)("../../" ~ imagePair.filename, imagePair.width, imagePair.height);
+    string thumbnailTag = format!(thumbnailFormat)("../../" ~ imagePair.thumbnailFilename);
+    Appender!string app;
+    app ~= linkTag;
+    app ~= "\n    ";
+    app ~= thumbnailTag;
+    Nullable!DateTime imageTimestamp = getImageTimestamp(imagePair.filename);
+    if (!imageTimestamp.isNull) {
+        DateTime dt = imageTimestamp.get;
+        app ~= "\n    ";
+        app ~= format!(captionFormat)(dt.year, dt.month, dt.day, dt.date.toSimpleString);
+    }
+    app ~= "\n</a>\n";
+    return app[];
 }
 
 ptrdiff_t indexOfStr(string source, string target) {
