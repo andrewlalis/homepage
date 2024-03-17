@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Andrew's Garden: Sage</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Information about Andrew's Garden">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <script src="../../scripts/themes.min.js"></script>
+    <noscript><style>.jsonly{display: none !important;}</style></noscript>
+    <link rel="stylesheet" href="../../styles/style.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/garden.css" type="text/css">
+    <script src="../../scripts/sitestat.js?remote-url=sitestat.andrewlalis.com" async></script>
+
+    <script type="module">
+        import PhotoSwipeLightbox from "../../vendor/photoswipe/photoswipe-lightbox.esm.min.js";
+        import PhotoSwipe from "../../vendor/photoswipe/photoswipe.esm.min.js";
+        const lightbox = new PhotoSwipeLightbox({
+            gallery: ".pswp-gallery",
+            children: "a",
+            pswpModule: PhotoSwipe
+        });
+        lightbox.init();
+    </script>
+    <link rel="stylesheet" href="../../vendor/photoswipe/photoswipe.css" type="text/css">
+</head>
+
+<body>
+    <header class="page-header">
+        <h1>Andrew's Garden</h1>
+        <h2 style="font-style: italic">Salvia officinalis</h2>
+        <nav>
+            <div>
+                <a href="../../index.html">Home</a>
+                <a href="../../articles.html">Articles</a>
+                <a href="../../projects.html">Projects</a>
+                <a href="../../training.html">Training</a>
+                <a class="page-header-selected" href="../../garden.html">Garden</a>
+                <a href="../../contact.html">Contact</a>
+                <a href="../../logbook.html">Logbook</a>
+            </div>
+            <div>
+                <a href="https://github.com/andrewlalis">GitHub</a>
+                <a href="https://www.linkedin.com/in/andrew-lalis/">LinkedIn</a>
+                <a href="https://www.youtube.com/channel/UC9X4mx6-ObPUB6-ud2IGAFQ">YouTube</a>
+            </div>
+        </nav>
+        <button id="themeToggleButton" class="jsonly">Change Color Theme</button>
+        <hr>
+    </header>
+
+    <main>
+        <article>
+            <h2>About Sage</h2>
+            <p>A perennial, evergreen shrub originally from the mediterranean region, used in cooking and medicine.</p>
+            <p>
+                <a href="https://en.wikipedia.org/wiki/Salvia_officinalis">
+                    https://en.wikipedia.org/wiki/Salvia_officinalis
+                </a>
+            </p>
+        </article>
+        <article>
+            <h2 id="plants">Plants</h2>
+            <p>
+                Here's a detailed list of all plants I have of this species.
+            </p>
+            <div class="plant-card">
+    <section>
+        <h2>sage-001</h2>
+        <p class="gen">Generation F1</p>
+        <p>A small patch of sage herbs in the corner of the garden.</p>
+        <p>Planted from seed on the 2nd of March, 2024.</p>
+    </section>
+    <section>
+        <div class="pswp-gallery">
+            <a href="../../images/garden/plants/sage-001/20240316_192418.jpg" data-pswp-width="1387" data-pswp-height="1634" target="_blank">
+    <img src="../../images/garden/plants/sage-001/20240316_192418.thumb.jpg" alt="" style="display: block;"/>
+    <time datetime="2024-03-16">2024-Mar-16</time>
+</a>
+
+        </div>
+    </section>
+</div>
+        </article>
+    </main>
+</body>

@@ -47,12 +47,9 @@ private void renderSpeciesCards(PlantData data) {
         ]);
         ImageFilePair[] imagePairs = getSpeciesImages(s.id);
         if (imagePairs.length > 0) {
-            string imageFile = imagePairs[0].filename;
-            string thumbnailFile = imagePairs[0].thumbnailFilename;
-            string imgTag = "<img src=\"" ~ (thumbnailFile is null ? imageFile : thumbnailFile) ~ "\"/>";
-            card = replaceFirst(card, "!IMAGE!", imgTag);
+            card = replaceFirst(card, "!IMAGES!", generatePhotoSwipeElement(imagePairs[0], false));
         } else {
-            card = replaceFirst(card, "!IMAGE!", "");
+            card = replaceFirst(card, "!IMAGES!", "");
         }
         htmlApp ~= "\n" ~ card;
     }
@@ -105,7 +102,7 @@ private void renderSpeciesPages(PlantData data) {
     }
 }
 
-private string generatePhotoSwipeElement(ImageFilePair imagePair) {
+private string generatePhotoSwipeElement(ImageFilePair imagePair, bool addCaption = true) {
     import std.format;
     import std.datetime;
     import std.typecons;
@@ -119,7 +116,7 @@ private string generatePhotoSwipeElement(ImageFilePair imagePair) {
     app ~= "\n    ";
     app ~= thumbnailTag;
     Nullable!DateTime imageTimestamp = getImageTimestamp(imagePair.filename);
-    if (!imageTimestamp.isNull) {
+    if (addCaption && !imageTimestamp.isNull) {
         DateTime dt = imageTimestamp.get;
         app ~= "\n    ";
         app ~= format!(captionFormat)(dt.year, dt.month, dt.day, dt.date.toSimpleString);

@@ -106,9 +106,11 @@ PlantData parsePlantData(string filename) {
     
     auto plantAppender = appender(&result.plants);
     foreach (row; plantRows) {
+        import std.string : strip;
         if (row.children.length < 4) continue;
         Plant plant;
         plant.speciesScientificName = readTableCellText(row.children[0]);
+        if (plant.speciesScientificName.strip.length == 0) continue;
         plant.identifier = readTableCellText(row.children[1]);
         string fGenStr = readTableCellText(row.children[2]);
         import std.conv : to;

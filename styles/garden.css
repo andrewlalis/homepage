@@ -30,10 +30,14 @@
     margin: 0.5em 0;
 }
 
-.species-card > img {
+.species-card > .pswp-gallery {
     max-width: 49.5%;
-    object-fit: scale-down;
     flex-grow: 0;
+}
+
+.species-card > .pswp-gallery > a > img {
+    max-width: 100%;
+    object-fit: scale-down;
 }
 
 
